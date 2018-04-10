@@ -17,6 +17,14 @@ public class DriveTrain {
     double time, Kp, Ki, Kd, output;
     double leftOut, rightOut, frontLeftOut, frontRightOut;
 
+    public enum motor_mode {
+        run_to_position, run_with_encoder, run_without_encoder
+    }
+
+    public enum motor {
+        Left, Right, FrontLeft, FrontRight
+    }
+
 
 
     public DriveTrain(HardwareMap map){ //drivetrain init function for hardware class
@@ -59,6 +67,28 @@ public class DriveTrain {
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+    }
+
+    public void setMode(motor_mode mode){
+        if(mode == motor_mode.run_without_encoder){
+            left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            right.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        } else if(mode == motor_mode.run_with_encoder){
+            left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        } else if(mode == motor_mode.run_to_position){
+            
+            left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        }
     }
 
     public void runProfile(double output){
