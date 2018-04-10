@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.stormbots.MiniPID;
 
+import org.firstinspires.ftc.robotcore.external.navigation.Position;
+import org.firstinspires.ftc.teamcode.RobotFunctions.Point;
 import org.firstinspires.ftc.teamcode.RobotFunctions.calculators;
 
 
@@ -14,7 +16,7 @@ public class DriveTrain {
     calculators cal = new calculators();
     double gamepadX, gamepadY;
     MiniPID pid1, pid2, pid3, pid4; //1= back left, 2 = front left, 3 = back right, 4 = front right
-    double time, Kp, Ki, Kd, output;
+    double Kp, Ki, Kd, output;
     double leftOut, rightOut, frontLeftOut, frontRightOut;
 
     public enum motor_mode {
@@ -83,7 +85,6 @@ public class DriveTrain {
             frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         } else if(mode == motor_mode.run_to_position){
-            
             left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -174,6 +175,21 @@ public class DriveTrain {
         frontRightPreviousTime = frontRightCurrentTime;
         frontRightPreviousDist = frontRightDist;
         return frontRightSpeed;
+    }
+
+    double heading, preHeading;
+    double Vl, Vr, Vfl, Vfr; // wheel velocities
+    double time, preTime, diffTime;
+    double X, Y, preX, preY;
+    Point pos;
+
+    public Point GetCoordinates(double Heading){// equations found from this paper http://www8.cs.umu.se/kurser/5DV122/HT13/material/Hellstrom-ForwardKinematics.pdf
+        heading = Math.toRadians(Heading);
+        Vl = leftSpeed(); Vr = rightSpeed(); Vfl = frontLeftSpeed(); Vfr = frontRightSpeed();
+        pos.setPoint(X, Y);
+
+
+        return pos;
     }
 
 
