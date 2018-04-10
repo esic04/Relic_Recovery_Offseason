@@ -5,8 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.stormbots.MiniPID;
 
-import org.firstinspires.ftc.robotcore.external.navigation.Position;
-import org.firstinspires.ftc.teamcode.RobotFunctions.Point;
+import org.firstinspires.ftc.teamcode.RobotFunctions.Pose;
 import org.firstinspires.ftc.teamcode.RobotFunctions.calculators;
 
 
@@ -177,16 +176,21 @@ public class DriveTrain {
         return frontRightSpeed;
     }
 
-    double heading, preHeading;
+    double newHeading, preHeading, degrees;
     double Vl, Vr, Vfl, Vfr; // wheel velocities
     double time, preTime, diffTime;
-    double X, Y, preX, preY;
-    Point pos;
+    double newX, newY, preX, preY;
+    Pose pos;
 
-    public Point GetCoordinates(double Heading){// equations found from this paper http://www8.cs.umu.se/kurser/5DV122/HT13/material/Hellstrom-ForwardKinematics.pdf
-        heading = Math.toRadians(Heading);
+    public Pose GetPose(double Heading){// equations found from this paper http://www8.cs.umu.se/kurser/5DV122/HT13/material/Hellstrom-ForwardKinematics.pdf
+        preHeading = Math.toRadians(Heading);
         Vl = leftSpeed(); Vr = rightSpeed(); Vfl = frontLeftSpeed(); Vfr = frontRightSpeed();
-        pos.setPoint(X, Y);
+
+
+
+        degrees = Math.toDegrees(newHeading);
+
+        pos.setPose(newX, newY, degrees);
 
 
         return pos;
