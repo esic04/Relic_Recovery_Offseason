@@ -6,13 +6,13 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.stormbots.MiniPID;
 
 import org.firstinspires.ftc.teamcode.RobotFunctions.Pose;
-import org.firstinspires.ftc.teamcode.RobotFunctions.calculators;
+import org.firstinspires.ftc.teamcode.RobotFunctions.Calculators;
 
 
 public class DriveTrain {
     public DcMotor left, right, frontLeft, frontRight;
     HardwareMap map;
-    calculators cal = new calculators();
+    Calculators cal = new Calculators();
     double gamepadX, gamepadY;
     MiniPID pid1, pid2, pid3, pid4; //1= back left, 2 = front left, 3 = back right, 4 = front right
     double Kp, Ki, Kd, output;
@@ -132,7 +132,7 @@ public class DriveTrain {
         leftPos = left.getCurrentPosition();
         leftDist = cal.Encoder2Ft(leftPos);
         leftCurrentTime = System.currentTimeMillis() / 1000.0; //converts millisec to sec, decimal needed because of int/int
-        leftSpeed = (leftDist - leftPreviousDist) / (leftCurrentTime - leftPreviousTime);
+        leftSpeed = -(leftDist - leftPreviousDist) / (leftCurrentTime - leftPreviousTime);
         leftPreviousTime = leftCurrentTime;
         leftPreviousDist = leftDist;
         return leftSpeed;
@@ -145,7 +145,7 @@ public class DriveTrain {
         rightPos = right.getCurrentPosition();
         rightDist = cal.Encoder2Ft(rightPos);
         rightCurrentTime = System.currentTimeMillis() / 1000.0;
-        rightSpeed = (rightDist - rightPreviousDist) / (rightCurrentTime - rightPreviousTime);
+        rightSpeed = -(rightDist - rightPreviousDist) / (rightCurrentTime - rightPreviousTime);
         rightPreviousTime = rightCurrentTime;
         rightPreviousDist = rightDist;
         return rightSpeed;
@@ -157,7 +157,7 @@ public class DriveTrain {
         frontLeftPos = frontLeft.getCurrentPosition();
         frontLeftDist = cal.Encoder2Ft(frontLeftPos);
         frontLeftCurrentTime = System.currentTimeMillis() / 1000.0;
-        frontLeftSpeed = (frontLeftDist - frontLeftPreviousDist) / (frontLeftCurrentTime - frontLeftPreviousTime);
+        frontLeftSpeed = -(frontLeftDist - frontLeftPreviousDist) / (frontLeftCurrentTime - frontLeftPreviousTime);
         frontLeftPreviousTime = frontLeftCurrentTime;
         frontLeftPreviousDist = frontLeftDist;
         return frontLeftSpeed;
@@ -170,28 +170,39 @@ public class DriveTrain {
         frontRightPos = frontRight.getCurrentPosition();
         frontRightDist = cal.Encoder2Ft(frontRightPos);
         frontRightCurrentTime = System.currentTimeMillis() / 1000.0;
-        frontRightSpeed = (frontRightDist - frontRightPreviousDist) / (frontRightCurrentTime - frontRightPreviousTime);
+        frontRightSpeed = -(frontRightDist - frontRightPreviousDist) / (frontRightCurrentTime - frontRightPreviousTime);
         frontRightPreviousTime = frontRightCurrentTime;
         frontRightPreviousDist = frontRightDist;
         return frontRightSpeed;
     }
 
     double newHeading, preHeading, degrees;
-    double Vl, Vr, Vfl, Vfr; // wheel velocities
+    double Pl, Pr; // encoder counts
     double time, preTime, diffTime;
     double newX, newY, preX, preY;
-    Pose pos;
+    double R, wdeltaT, Iccx, Iccy, L;
+    Pose pos = new Pose(0, 0, 0);
 
     public Pose GetPose(double Heading){// equations found from this paper http://www8.cs.umu.se/kurser/5DV122/HT13/material/Hellstrom-ForwardKinematics.pdf
         preHeading = Math.toRadians(Heading);
-        Vl = leftSpeed(); Vr = rightSpeed(); Vfl = frontLeftSpeed(); Vfr = frontRightSpeed();
+        Pl = (left.getCurrentPosition() + frontLeft.getCurrentPosition()) / 2; Pr = (right.getCurrentPosition() + frontRight.getCurrentPosition()) / 2;
+        time = System.currentTimeMillis() / 1000.0;
+        L = 16.25;
+        R = (L / 2) * ((Pr + Pl) / (Pr - Pl));
+        wdeltaT = ((Pr - Pl) * 0.0074799825) / L;
+        Iccx = (preX - R) * Math.sin(preHeading);
+        Iccy = (preY + R) * Math.cos(preHeading);
 
-
+        newX = (Math.cos(wdeltaT) * (preX - Iccx)) + (-Math.sin(wdeltaT) * (preY - Iccy)) + Iccx;
+        newY = (Math.sin(wdeltaT) * (preX - Iccx)) + (Math.cos(wdeltaT) * (preY - Iccy)) + Iccy;
+        newHeading = preHeading + wdeltaT;
 
         degrees = Math.toDegrees(newHeading);
 
         pos.setPose(newX, newY, degrees);
 
+        preTime = time;
+        preX = newX; preY = newY;
 
         return pos;
     }

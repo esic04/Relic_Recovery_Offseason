@@ -4,7 +4,7 @@ package org.firstinspires.ftc.teamcode.RobotFunctions;
  * Created by ethan on 3/23/18.
  */
 
-public class calculators {
+public class Calculators {
     double encoderDistance;
     double distanceIn;
     double distanceFt;

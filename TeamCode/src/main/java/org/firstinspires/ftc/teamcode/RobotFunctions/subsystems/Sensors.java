@@ -35,4 +35,13 @@ public class Sensors {
         heading = (angle.firstAngle + 360) % 360; // converts 180 -- -180 range to 0 - 360
         return heading;
     }
+
+    double degrees, radians;
+    Orientation degree;
+
+    public double getRadian(){
+        degree = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        radians = Math.toRadians(((degree.firstAngle + 360) % 360)); // converts 180 -- -180 range to 0 - 360 then converts to radians
+        return radians;
+    }
 }

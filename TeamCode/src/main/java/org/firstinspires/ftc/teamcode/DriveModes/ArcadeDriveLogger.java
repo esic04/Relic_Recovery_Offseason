@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.RobotFunctions.DataLogger;
-import org.firstinspires.ftc.teamcode.RobotFunctions.calculators;
+import org.firstinspires.ftc.teamcode.RobotFunctions.Calculators;
 
 /**
  * Created by ethan on 3/22/18.
@@ -20,7 +20,7 @@ public class ArcadeDriveLogger extends OpMode {
 
     double averageLeft, averageRight;
 
-    calculators convert = new calculators();
+    Calculators convert = new Calculators();
 
     int count;
 

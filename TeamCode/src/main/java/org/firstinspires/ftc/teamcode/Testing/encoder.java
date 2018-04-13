@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.RobotFunctions.Hardware;
-import org.firstinspires.ftc.teamcode.RobotFunctions.calculators;
+import org.firstinspires.ftc.teamcode.RobotFunctions.Calculators;
 
 /**
  * Created by ethan on 3/6/18.
@@ -24,7 +24,7 @@ public class encoder extends OpMode {
 
     Hardware h = new Hardware();
 
-    calculators convert = new calculators();
+    Calculators convert = new Calculators();
     @Override
     public void init(){
         left = hardwareMap.get(DcMotor.class, "left");
