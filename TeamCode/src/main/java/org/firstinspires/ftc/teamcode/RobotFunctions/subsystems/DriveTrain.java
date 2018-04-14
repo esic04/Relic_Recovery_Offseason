@@ -176,33 +176,37 @@ public class DriveTrain {
         return frontRightSpeed;
     }
 
-    double newHeading, preHeading, degrees;
-    double Pl, Pr; // encoder counts
-    double time, preTime, diffTime;
-    double newX, newY, preX, preY;
-    double R, wdeltaT, Iccx, Iccy, L;
+    double Vr, Vl, Vrx, Vry = 0, omegaR;
+    double hdg;
+    double Vwx, Vwy;
+    double Xkp, Ykp, thetaK;
+    double currTime, preTime, deltaTime;
+    double width = 16.25 / 12;
+
     Pose pos = new Pose(0, 0, 0);
 
     public Pose GetPose(double Heading){// equations found from this paper http://www8.cs.umu.se/kurser/5DV122/HT13/material/Hellstrom-ForwardKinematics.pdf
-        preHeading = Math.toRadians(Heading);
-        Pl = (left.getCurrentPosition() + frontLeft.getCurrentPosition()) / 2; Pr = (right.getCurrentPosition() + frontRight.getCurrentPosition()) / 2;
-        time = System.currentTimeMillis() / 1000.0;
-        L = 16.25;
-        R = (L / 2) * ((Pr + Pl) / (Pr - Pl));
-        wdeltaT = ((Pr - Pl) * 0.0074799825) / L;
-        Iccx = (preX - R) * Math.sin(preHeading);
-        Iccy = (preY + R) * Math.cos(preHeading);
+        hdg = ((Heading + 90) % 360) * (Math.PI / 180);
 
-        newX = (Math.cos(wdeltaT) * (preX - Iccx)) + (-Math.sin(wdeltaT) * (preY - Iccy)) + Iccx;
-        newY = (Math.sin(wdeltaT) * (preX - Iccx)) + (Math.cos(wdeltaT) * (preY - Iccy)) + Iccy;
-        newHeading = preHeading + wdeltaT;
+        currTime = System.currentTimeMillis() / 1000.0;
 
-        degrees = Math.toDegrees(newHeading);
+        Vr = (rightSpeed() + frontRightSpeed()) / 2;
+        Vl = (leftSpeed() + frontLeftSpeed()) / 2;
 
-        pos.setPose(newX, newY, degrees);
+        deltaTime = currTime - preTime;
 
-        preTime = time;
-        preX = newX; preY = newY;
+        Vrx = (Vr + Vl) / 2;
+        omegaR = (Vr - Vl) / width;
+
+        Vwx = Vrx * Math.cos(hdg) - Vry * Math.sin(hdg);
+        Vwy = Vrx * Math.sin(hdg) + Vry * Math.cos(hdg);
+
+        Xkp = Xkp + Vwx * deltaTime;
+        Ykp = Ykp + Vwy * deltaTime;
+
+        preTime = currTime;
+
+        pos.setPose(Xkp, Ykp, (Heading + 90) % 360);
 
         return pos;
     }
