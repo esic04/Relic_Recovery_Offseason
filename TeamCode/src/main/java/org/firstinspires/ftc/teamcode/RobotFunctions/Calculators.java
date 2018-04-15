@@ -24,5 +24,16 @@ public class Calculators {
         return distanceFt;
     }
 
+    Point p1, p2;
+    double distance;
+
+    public double PointDistance(Point point1, Point point2){
+        p1 = point1;
+        p2 = point2;
+
+        distance = Math.sqrt((Math.pow((p2.getX() - p1.getX()), 2)) + (Math.pow((p2.getY() - p1.getY()), 2)));
+        return distance;
+    }
+
 
 }

@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.RobotFunctions.Calculators;
 import org.firstinspires.ftc.teamcode.RobotFunctions.Hardware;
+import org.firstinspires.ftc.teamcode.RobotFunctions.Point;
 import org.firstinspires.ftc.teamcode.RobotFunctions.Pose;
 
 @TeleOp
@@ -12,6 +13,7 @@ public class GetPosition extends OpMode {
     Hardware robot = new Hardware();
     Pose position;
     Calculators cal = new Calculators();
+    Point origin = new Point(0, 0);
 
 
     @Override
@@ -28,6 +30,7 @@ public class GetPosition extends OpMode {
         telemetry.addData("x", position.getX());
         telemetry.addData("y", position.getY());
         telemetry.addData("heading", position.getHeading());
+        telemetry.addData("distance from start", cal.PointDistance(origin, robot.driveTrain.GetPosition(robot.sensors.getHeading())));
 
         telemetry.update();
 

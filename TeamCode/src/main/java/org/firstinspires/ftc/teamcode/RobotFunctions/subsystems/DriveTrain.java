@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.stormbots.MiniPID;
 
+import org.firstinspires.ftc.teamcode.RobotFunctions.Point;
 import org.firstinspires.ftc.teamcode.RobotFunctions.Pose;
 import org.firstinspires.ftc.teamcode.RobotFunctions.Calculators;
 
@@ -185,7 +186,7 @@ public class DriveTrain {
 
     Pose pos = new Pose(0, 0, 0);
 
-    public Pose GetPose(double Heading){// equations found from this paper http://www8.cs.umu.se/kurser/5DV122/HT13/material/Hellstrom-ForwardKinematics.pdf
+    private Pose CalcPose(double Heading){// equations found from https://answers.ros.org/question/231942/computing-odometry-from-two-velocities/
         hdg = ((Heading + 90) % 360) * (Math.PI / 180);
 
         currTime = System.currentTimeMillis() / 1000.0;
@@ -210,6 +211,19 @@ public class DriveTrain {
 
         return pos;
     }
+
+    public Pose GetPose(double Heading){
+       return CalcPose(Heading);
+    }
+
+    Point position = new Point(0, 0);
+
+    public Point GetPosition(double Heading){
+        position.setPosition(CalcPose(Heading).getX(), CalcPose(Heading).getY());
+        return position;
+    }
+
+
 
 
 
