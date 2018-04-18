@@ -31,7 +31,7 @@ public class Calculators {
         p1 = point1;
         p2 = point2;
 
-        distance = Math.sqrt((Math.pow((p2.getX() - p1.getX()), 2)) + (Math.pow((p2.getY() - p1.getY()), 2)));
+        distance = Math.sqrt((Math.pow((p2.getX() - p1.getX()), 2)) + (Math.pow((p2.getY() - p1.getY()), 2))); // distance formula
         return distance;
     }
 

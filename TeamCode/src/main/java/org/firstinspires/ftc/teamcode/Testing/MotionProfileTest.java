@@ -19,7 +19,7 @@ public class MotionProfileTest extends LinearOpMode {
 
     @Override
     public void runOpMode(){
-        test.setInputs(0.2, 0.8, 6);
+        test.setInputs(0.2, 0.8, 3);
 
         data.addField("time");
         data.addField("output");
