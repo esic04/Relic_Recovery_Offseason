@@ -32,7 +32,7 @@ public class PurePursuitProfile {
     double previousSpeed, time, preTime, deltaT, currAcel;
     boolean decel, fastDecel;
 
-    public double getOutput(Point position, Point target, double speed){
+    public double getOutput(Point position, Point target){
         if(count == 0){
             stDist = cal.PointDistance(stPos, tgt);
             count++;
@@ -44,7 +44,7 @@ public class PurePursuitProfile {
         dist = cal.PointDistance(pos, tgt);
         stDist = cal.PointDistance(stPos, tgt);
 
-        stoppingAccel = (0 - (Math.pow(speed, 2))) / (2 * dist);
+        stoppingAccel = (0 - (Math.pow(previousSpeed, 2))) / (2 * dist);
 
         if(stoppingAccel < accel){
             desiredOut = speed;

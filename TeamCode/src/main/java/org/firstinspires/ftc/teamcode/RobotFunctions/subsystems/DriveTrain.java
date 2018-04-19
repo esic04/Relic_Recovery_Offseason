@@ -16,7 +16,7 @@ public class DriveTrain {
     Calculators cal = new Calculators();
     double gamepadX, gamepadY;
     MiniPID pid1, pid2, pid3, pid4; //1= back left, 2 = front left, 3 = back right, 4 = front right
-    double Kp, Ki, Kd, output;
+
     double leftOut, rightOut, frontLeftOut, frontRightOut;
 
     public enum motor_mode {
@@ -92,28 +92,24 @@ public class DriveTrain {
         }
     }
 
+    double output;
+    double Kp = 0.03;
+    double Ki = 0.000007;
+    double Kd = 0;
+
     public void runProfile(double output){
         this.output = output;
 
-        Kp = 0.03;
-        Ki = 0.000007;
-        Kd = 0;
-
-        left.setDirection(DcMotorSimple.Direction.REVERSE);
-        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        right.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
         pid1 = new MiniPID(Kp, Ki, Kd);
         pid2 = new MiniPID(Kp, Ki, Kd);
         pid3 = new MiniPID(Kp, Ki, Kd);
         pid4 = new MiniPID(Kp, Ki, Kd);
 
-        pid1.setDirection(true);
-        pid2.setDirection(true);
-
-        pid1.setOutputRampRate(0.2);
-        pid2.setOutputRampRate(0.2);
-        pid3.setOutputRampRate(0.2);
-        pid4.setOutputRampRate(0.2);
+        pid3.setDirection(true);
+        pid4.setDirection(true);
 
         leftOut = pid1.getOutput(leftSpeed(), output) + leftOut; //for velocity pid, adds pid out to previous output for better control
         rightOut = pid3.getOutput(rightSpeed(), output) + rightOut;
@@ -124,6 +120,40 @@ public class DriveTrain {
         right.setPower(rightOut);
         frontLeft.setPower(frontLeftOut);
         frontRight.setPower(frontRightOut);
+
+    }
+
+    MiniPID bl, br, fl, fr, angle;
+    double leftPow, rightPow, frontLeftPow, frontRightPow;
+    double leftTgt, rightTgt, headingOut;
+
+    public void setSpeeds(double leftSpeed, double rightSpeed, double heading, double headingTgt){
+        right.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        bl = new MiniPID(Kp, Ki, Kd);
+        br = new MiniPID(Kp, Ki, Kd);
+        fl = new MiniPID(Kp, Ki, Kd);
+        fr = new MiniPID(Kp, Ki, Kd);
+        angle = new MiniPID(0.03, 0.000007, 0);
+
+        headingOut = angle.getOutput(heading, headingTgt);
+
+        leftTgt = leftSpeed + headingOut;
+        rightTgt = rightSpeed - headingOut;
+
+        bl.setDirection(true);
+        fl.setDirection(true);
+
+        leftPow = bl.getOutput(leftSpeed(), leftTgt) + leftPow; //for velocity pid, adds pid out to previous output for better control
+        rightPow = br.getOutput(rightSpeed(), rightTgt) + rightPow;
+        frontLeftPow = fl.getOutput(frontLeftSpeed(), leftTgt) + frontLeftPow;
+        frontRightPow = fr.getOutput(frontRightSpeed(), rightTgt) + frontRightPow;
+
+        left.setPower(leftPow);
+        right.setPower(rightPow);
+        frontLeft.setPower(frontLeftPow);
+        frontRight.setPower(frontRightPow);
 
     }
 

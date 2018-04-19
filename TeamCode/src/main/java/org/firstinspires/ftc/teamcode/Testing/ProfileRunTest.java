@@ -21,7 +21,7 @@ public class ProfileRunTest extends LinearOpMode {
         robot.init(hardwareMap);
         robot.driveTrain.SetBrake();
 
-        profile.setInputs(0.8, 1.5, 4);
+        profile.setInputs(1.2, 1.8, 5);
 
         data.addField("time");
         data.addField("motor speed");
