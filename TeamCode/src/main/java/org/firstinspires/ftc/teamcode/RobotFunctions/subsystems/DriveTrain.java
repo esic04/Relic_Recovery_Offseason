@@ -15,7 +15,10 @@ public class DriveTrain {
     HardwareMap map;
     Calculators cal = new Calculators();
     double gamepadX, gamepadY;
-    MiniPID pid1, pid2, pid3, pid4; //1= back left, 2 = front left, 3 = back right, 4 = front right
+    MiniPID pid1 = new MiniPID(0, 0, 0);
+    MiniPID pid2 = new MiniPID(0, 0, 0);
+    MiniPID pid3 = new MiniPID(0, 0, 0);
+    MiniPID pid4 = new MiniPID(0, 0, 0);; //1= back left, 2 = front left, 3 = back right, 4 = front right
 
     double leftOut, rightOut, frontLeftOut, frontRightOut;
 
@@ -93,25 +96,29 @@ public class DriveTrain {
     }
 
     double output;
-    double Kp = 0.03;
-    double Ki = 0.000007;
-    double Kd = 0;
+    double Kp;
+    double Ki;
+    double Kd;
 
     public void runProfile(double output){
         this.output = output;
 
-        right.setDirection(DcMotorSimple.Direction.REVERSE);
-        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        Kp = 0.03;
+        Ki = 0.000007;
+        Kd = 0;
+
+        left.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
         pid1 = new MiniPID(Kp, Ki, Kd);
         pid2 = new MiniPID(Kp, Ki, Kd);
         pid3 = new MiniPID(Kp, Ki, Kd);
         pid4 = new MiniPID(Kp, Ki, Kd);
 
-        pid3.setDirection(true);
-        pid4.setDirection(true);
+        pid1.setDirection(true);
+        pid2.setDirection(true);
 
-        leftOut = pid1.getOutput(leftSpeed(), output) + leftOut; //for velocity pid, adds pid out to previous output for better control
+        leftOut = pid1.getOutput(leftSpeed(), output) + leftOut; // for velocity pid, adds pid out to previous output for better control
         rightOut = pid3.getOutput(rightSpeed(), output) + rightOut;
         frontLeftOut = pid2.getOutput(frontLeftSpeed(), output) + frontLeftOut;
         frontRightOut = pid4.getOutput(frontRightSpeed(), output) + frontRightOut;
@@ -128,8 +135,8 @@ public class DriveTrain {
     double leftTgt, rightTgt, headingOut;
 
     public void setSpeeds(double leftSpeed, double rightSpeed, double heading, double headingTgt){
-        right.setDirection(DcMotorSimple.Direction.REVERSE);
-        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        left.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
         bl = new MiniPID(Kp, Ki, Kd);
         br = new MiniPID(Kp, Ki, Kd);
@@ -137,13 +144,13 @@ public class DriveTrain {
         fr = new MiniPID(Kp, Ki, Kd);
         angle = new MiniPID(0.03, 0.000007, 0);
 
-        headingOut = angle.getOutput(heading, headingTgt);
+        headingOut = angle.getOutput((heading + 90) % 360, headingTgt);
 
-        leftTgt = leftSpeed + headingOut;
-        rightTgt = rightSpeed - headingOut;
+        leftTgt = leftSpeed - headingOut;
+        rightTgt = rightSpeed + headingOut;
 
-        bl.setDirection(true);
-        fl.setDirection(true);
+        br.setDirection(true);
+        fr.setDirection(true);
 
         leftPow = bl.getOutput(leftSpeed(), leftTgt) + leftPow; //for velocity pid, adds pid out to previous output for better control
         rightPow = br.getOutput(rightSpeed(), rightTgt) + rightPow;
@@ -216,7 +223,7 @@ public class DriveTrain {
 
     Pose pos = new Pose(0, 0, 0);
 
-    private Pose CalcPose(double Heading){// equations found from https://answers.ros.org/question/231942/computing-odometry-from-two-velocities/
+    public Pose CalcPose(double Heading){// equations found from https://answers.ros.org/question/231942/computing-odometry-from-two-velocities/
         hdg = ((Heading + 90) % 360) * (Math.PI / 180);
 
         currTime = System.currentTimeMillis() / 1000.0;

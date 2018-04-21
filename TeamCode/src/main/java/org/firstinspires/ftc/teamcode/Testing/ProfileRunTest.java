@@ -2,26 +2,38 @@ package org.firstinspires.ftc.teamcode.Testing;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.stormbots.MiniPID;
 
 import org.firstinspires.ftc.teamcode.RobotFunctions.DataLogger;
 import org.firstinspires.ftc.teamcode.RobotFunctions.Hardware;
+import org.firstinspires.ftc.teamcode.RobotFunctions.MotionStuff.PID;
 import org.firstinspires.ftc.teamcode.RobotFunctions.MotionStuff.ProfileGenerator;
+import org.firstinspires.ftc.teamcode.RobotFunctions.subsystems.DriveTrain;
+
 @Autonomous
 public class ProfileRunTest extends LinearOpMode {
     Hardware robot = new Hardware();
     ProfileGenerator profile = new ProfileGenerator();
     DataLogger data = new DataLogger("motion profile");
 
-    double leftSpeed, rightSpeed, frontLeftSpeed, frontRightSpeed;
+    double leftOut, rightOut, frontLeftOut, frontRightOut;
     double time;
-    double profileOut;
+    double output;
+    double Kp = 0.05;
+    double Ki = 0.0001; //tuning constants
+    double Kd = 0;
+
+    PID pid1 = new PID(Kp, Ki, Kd, 0.4, -1, 1);
+    PID pid2 = new PID(Kp, Ki, Kd, 0.4, -1, 1);
+    PID pid3 = new PID(Kp, Ki, Kd, 0.4, -1, 1);
+    PID pid4 = new PID(Kp, Ki, Kd, 0.4, -1, 1); //1= back left, 2 = front left, 3 = back right, 4 = front right
 
     @Override
     public void runOpMode(){
         robot.init(hardwareMap);
-        robot.driveTrain.SetBrake();
 
-        profile.setInputs(1.2, 1.8, 5);
+        profile.setInputs(0.8, 1.5, 4);
 
         data.addField("time");
         data.addField("motor speed");
@@ -29,6 +41,7 @@ public class ProfileRunTest extends LinearOpMode {
         data.newLine();
 
         robot.driveTrain.resetEncoders();
+        robot.driveTrain.setMode(DriveTrain.motor_mode.run_with_encoder);
 
         waitForStart();
 
@@ -37,17 +50,29 @@ public class ProfileRunTest extends LinearOpMode {
 
             time = getRuntime();
 
-            profileOut = profile.getOutput(time);
+            output = profile.getOutput(time); // try writing the pid loops in here
 
-            robot.driveTrain.runProfile(profileOut);
+            robot.driveTrain.right.setDirection(DcMotorSimple.Direction.REVERSE);
+            robot.driveTrain.frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+
+            leftOut = pid1.getOutput(robot.driveTrain.leftSpeed(), output) + leftOut;  //for velocity pid, adds pid out to previous output for better control
+            rightOut = pid3.getOutput(robot.driveTrain.rightSpeed(), output) + rightOut;
+            frontLeftOut = pid2.getOutput(robot.driveTrain.frontLeftSpeed(), output) + frontLeftOut;
+            frontRightOut = pid4.getOutput(robot.driveTrain.frontRightSpeed(), output) + frontRightOut;
+
+            robot.driveTrain.left.setPower(leftOut);
+            robot.driveTrain.right.setPower(rightOut);
+            robot.driveTrain.frontLeft.setPower(frontLeftOut);
+            robot.driveTrain.frontRight.setPower(frontRightOut);
 
             data.addField(time);
             data.addField((robot.driveTrain.leftSpeed() + robot.driveTrain.rightSpeed() + robot.driveTrain.frontLeftSpeed() + robot.driveTrain.frontRightSpeed()) / 4);
-            data.addField(profileOut);
+            data.addField(output);
             data.newLine();
 
-            telemetry.addData("profile output", profileOut);
-            telemetry.addData("left actual speed", leftSpeed);
+            telemetry.addData("profile output", output);
+            telemetry.addData("left actual speed", robot.driveTrain.leftSpeed());
+            telemetry.addData("left pow", leftOut);
             telemetry.update();
 
         }
