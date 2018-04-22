@@ -20,8 +20,8 @@ public class ProfileRunTest extends LinearOpMode {
     double leftOut, rightOut, frontLeftOut, frontRightOut;
     double time;
     double output;
-    double Kp = 0.05;
-    double Ki = 0.0001; //tuning constants
+    double Kp = 0.1;
+    double Ki = 0.000009; //tuning constants
     double Kd = 0;
 
     PID pid1 = new PID(Kp, Ki, Kd, 0.4, -1, 1);
@@ -41,7 +41,7 @@ public class ProfileRunTest extends LinearOpMode {
         data.newLine();
 
         robot.driveTrain.resetEncoders();
-        robot.driveTrain.setMode(DriveTrain.motor_mode.run_with_encoder);
+        //robot.driveTrain.setMode(DriveTrain.motor_mode.run_with_encoder);
 
         waitForStart();
 
@@ -51,9 +51,6 @@ public class ProfileRunTest extends LinearOpMode {
             time = getRuntime();
 
             output = profile.getOutput(time); // try writing the pid loops in here
-
-            robot.driveTrain.right.setDirection(DcMotorSimple.Direction.REVERSE);
-            robot.driveTrain.frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
             leftOut = pid1.getOutput(robot.driveTrain.leftSpeed(), output) + leftOut;  //for velocity pid, adds pid out to previous output for better control
             rightOut = pid3.getOutput(robot.driveTrain.rightSpeed(), output) + rightOut;
@@ -72,6 +69,7 @@ public class ProfileRunTest extends LinearOpMode {
 
             telemetry.addData("profile output", output);
             telemetry.addData("left actual speed", robot.driveTrain.leftSpeed());
+            telemetry.addData("right actual speed", robot.driveTrain.rightSpeed());
             telemetry.addData("left pow", leftOut);
             telemetry.update();
 

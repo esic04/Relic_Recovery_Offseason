@@ -173,7 +173,7 @@ public class DriveTrain {
         leftSpeed = -(leftDist - leftPreviousDist) / (leftCurrentTime - leftPreviousTime);
         leftPreviousTime = leftCurrentTime;
         leftPreviousDist = leftDist;
-        return leftSpeed;
+        return -leftSpeed;
 
     }
 
@@ -186,7 +186,7 @@ public class DriveTrain {
         rightSpeed = -(rightDist - rightPreviousDist) / (rightCurrentTime - rightPreviousTime);
         rightPreviousTime = rightCurrentTime;
         rightPreviousDist = rightDist;
-        return rightSpeed;
+        return -rightSpeed;
     }
 
     double frontLeftSpeed, frontLeftPreviousTime, frontLeftCurrentTime, frontLeftPos, frontLeftPreviousDist, frontLeftDist;
@@ -198,7 +198,7 @@ public class DriveTrain {
         frontLeftSpeed = -(frontLeftDist - frontLeftPreviousDist) / (frontLeftCurrentTime - frontLeftPreviousTime);
         frontLeftPreviousTime = frontLeftCurrentTime;
         frontLeftPreviousDist = frontLeftDist;
-        return frontLeftSpeed;
+        return -frontLeftSpeed;
 
     }
 
@@ -211,7 +211,7 @@ public class DriveTrain {
         frontRightSpeed = -(frontRightDist - frontRightPreviousDist) / (frontRightCurrentTime - frontRightPreviousTime);
         frontRightPreviousTime = frontRightCurrentTime;
         frontRightPreviousDist = frontRightDist;
-        return frontRightSpeed;
+        return -frontRightSpeed;
     }
 
     double Vr, Vl, Vrx, Vry = 0, omegaR;
