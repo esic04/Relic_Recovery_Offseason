@@ -41,11 +41,8 @@ public class DriveTrain {
     }
 
     public void arcadeDrive(double gamepadX, double gamepadY){//it drives
-        this.gamepadX = gamepadX;
-        this.gamepadY = gamepadY;
-
-        right.setDirection(DcMotorSimple.Direction.REVERSE);
-        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        this.gamepadX = -gamepadX;
+        this.gamepadY = -gamepadY;
 
         left.setPower(gamepadY - gamepadX);
         right.setPower(gamepadY + gamepadX);
