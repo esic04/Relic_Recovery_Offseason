@@ -21,12 +21,12 @@ public class ProfileRunTest extends LinearOpMode {
     double time;
     double output;
     double heading;
-    double Kp = 0.3;
-    double Ki = 0.00004; //tuning constants
-    double Kd = 0;
-    double headingP = 0.003;
-    double headingI = 0.00000006;
-    double headingD = 0;
+    double Kp = 0.3; //kp 0.3, ki 0.00004 kd 0 works sort of
+    double Ki = 0.00008; //tuning constants
+    double Kd = 0.00001;
+    double headingP = 0.003; //kp 0.003, ki 0.00000006, kd 0 works sort of
+    double headingI = 0.00000013;
+    double headingD = 0.00005;
 
     PID pid1 = new PID(Kp, Ki, Kd, 0.4, -1, 1);
     PID pid2 = new PID(Kp, Ki, Kd, 0.4, -1, 1);
