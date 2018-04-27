@@ -78,7 +78,7 @@ public class PIdTurnTest extends LinearOpMode {
                 I = Ilimit;
             }
 
-            output = (P * Kp) + (I * Ki) + (D * -Kd);
+            output = (P * Kp) + (I * Ki) + (D * Kd);
             telemetry.addData("output", output);
 
             if(output > 1){ //limits the whole output
