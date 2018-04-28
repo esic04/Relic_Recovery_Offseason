@@ -93,9 +93,10 @@ public class PIdTurnTest extends LinearOpMode {
             averageError = (error + preError + averageError) / 3; //was used for testing previously
             telemetry.addData("average error", averageError);
             telemetry.addData("error", error);
+            telemetry.addData("d", D);
             preError = error;
 
-            if((D > -0.0000001 && D < 0.0000001) && (error < 1 && error > -1)){ //checks error and rate of motor movement to break out of loop
+            if((D > -0.000000001 && D < 0.000000001) && (error < 1 && error > -1)){ //checks error and rate of motor movement to break out of loop
                 stopped = true;
             }
             telemetry.update();

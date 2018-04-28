@@ -21,12 +21,12 @@ public class ProfileRunTest extends LinearOpMode {
     double time;
     double output;
     double heading;
-    double Kp = 0.3; //kp 0.3, ki 0.00004 kd 0 works sort of
+    double Kp = 0.4; //kp 0.3, ki 0.00004 kd 0 works sort of
     double Ki = 0.00008; //tuning constants
-    double Kd = 0.00001;
+    double Kd = 0.00000005;
     double headingP = 0.003; //kp 0.003, ki 0.00000006, kd 0 works sort of
-    double headingI = 0.00000013;
-    double headingD = 0.00005;
+    double headingI = 0.00000012;
+    double headingD = 0.000000005;
 
     PID pid1 = new PID(Kp, Ki, Kd, 0.4, -1, 1);
     PID pid2 = new PID(Kp, Ki, Kd, 0.4, -1, 1);
@@ -38,7 +38,7 @@ public class ProfileRunTest extends LinearOpMode {
     public void runOpMode(){
         robot.init(hardwareMap);
 
-        profile.setInputs(0.8, 1.2, 4);
+        profile.setInputs(0.8, 1.3, 4);
 
         data.addField("time");
         data.addField("motor speed");
