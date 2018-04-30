@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.RobotFunctions.subsystems;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.stormbots.MiniPID;
@@ -11,9 +12,12 @@ import org.firstinspires.ftc.teamcode.RobotFunctions.Calculators;
 
 
 public class DriveTrain {
-    public DcMotor left, right, frontLeft, frontRight;
+    //public DcMotorEx left, right, frontLeft, frontRight;
     HardwareMap map;
     Calculators cal = new Calculators();
+
+    public DcMotorEx left, right, frontLeft, frontRight;
+
     double gamepadX, gamepadY;
     MiniPID pid1 = new MiniPID(0, 0, 0);
     MiniPID pid2 = new MiniPID(0, 0, 0);
@@ -34,10 +38,10 @@ public class DriveTrain {
 
     public DriveTrain(HardwareMap map){ //drivetrain init function for hardware class
         this.map = map;
-        left = map.dcMotor.get("left");
-        right = map.dcMotor.get("right");
-        frontLeft = map.dcMotor.get("frontLeft");
-        frontRight = map.dcMotor.get("frontRight");
+        left = (DcMotorEx) map.dcMotor.get("left");
+        right = (DcMotorEx) map.dcMotor.get("right");
+        frontLeft = (DcMotorEx) map.dcMotor.get("frontLeft");
+        frontRight = (DcMotorEx) map.dcMotor.get("frontRight");
     }
 
     public void arcadeDrive(double gamepadX, double gamepadY){//it drives
@@ -221,7 +225,7 @@ public class DriveTrain {
     Pose pos = new Pose(0, 0, 0);
 
     public Pose CalcPose(double Heading){// equations found from https://answers.ros.org/question/231942/computing-odometry-from-two-velocities/
-        hdg = ((Heading + 90) % 360) * (Math.PI / 180);
+        hdg = ((Heading + 90) % 360) * (Math.PI / 180); //shift angle 90 degrees then convert into radians
 
         currTime = System.currentTimeMillis() / 1000.0;
 

@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.stormbots.MiniPID;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.RobotFunctions.DataLogger;
 import org.firstinspires.ftc.teamcode.RobotFunctions.Hardware;
 import org.firstinspires.ftc.teamcode.RobotFunctions.MotionStuff.PID;
@@ -27,6 +28,9 @@ public class ProfileRunTest extends LinearOpMode {
     double headingP = 0.01; //kp 0.003, ki 0.00000012, kd 0.000000005 works sort of
     double headingI = 0.000004;
     double headingD = 0.0005;
+    double angularSpeed;
+    double gearRatio = 2.0/3;
+    double wheelr = 2;
 
     PID pid1 = new PID(Kp, Ki, Kd, 0.4, -1, 1);
     PID pid2 = new PID(Kp, Ki, Kd, 0.4, -1, 1);
@@ -38,7 +42,7 @@ public class ProfileRunTest extends LinearOpMode {
     public void runOpMode(){
         robot.init(hardwareMap);
 
-        profile.setInputs(0.8, 1.3, 4);
+        profile.setInputs(1, 1.6, 4);
 
         data.addField("time");
         data.addField("motor speed");
@@ -57,9 +61,9 @@ public class ProfileRunTest extends LinearOpMode {
 
             heading = (robot.sensors.getHeading() + 90) % 360;
 
-            output = profile.getOutput(time);
+            output = profile.getOutput(time) * 12; //convert ft/sec to in/sec
 
-            headingOut = headingPID.getOutput(heading, 90);
+            /* headingOut = headingPID.getOutput(heading, 90);
 
             leftOut = pid1.getOutput(robot.driveTrain.leftSpeed(), output) + leftOut - headingOut;  //for velocity pid, adds pid out to previous output for better control
             rightOut = pid3.getOutput(robot.driveTrain.rightSpeed(), output) + rightOut + headingOut;
@@ -71,16 +75,26 @@ public class ProfileRunTest extends LinearOpMode {
             robot.driveTrain.frontLeft.setPower(frontLeftOut);
             robot.driveTrain.frontRight.setPower(frontRightOut);
 
+            */
+
             data.addField(time);
-            data.addField((robot.driveTrain.leftSpeed() + robot.driveTrain.rightSpeed() + robot.driveTrain.frontLeftSpeed() + robot.driveTrain.frontRightSpeed()) / 4);
+            data.addField(((robot.driveTrain.leftSpeed() + robot.driveTrain.rightSpeed() + robot.driveTrain.frontLeftSpeed() + robot.driveTrain.frontRightSpeed()) / 4) * 12);
             data.addField(output);
             data.newLine();
 
+
+            angularSpeed = output / wheelr / gearRatio;
+
+            robot.driveTrain.left.setVelocity(angularSpeed, AngleUnit.RADIANS);
+            robot.driveTrain.right.setVelocity(angularSpeed, AngleUnit.RADIANS);
+            robot.driveTrain.frontLeft.setVelocity(angularSpeed, AngleUnit.RADIANS);
+            robot.driveTrain.frontRight.setVelocity(angularSpeed, AngleUnit.RADIANS);
+
             telemetry.addData("profile output", output);
-            telemetry.addData("left actual speed", robot.driveTrain.leftSpeed());
-            telemetry.addData("right actual speed", robot.driveTrain.rightSpeed());
+            telemetry.addData("left actual speed", robot.driveTrain.leftSpeed() * 12);
+            telemetry.addData("right actual speed", robot.driveTrain.rightSpeed() * 12);
             telemetry.addData("heading", heading);
-            telemetry.addData("left pow", leftOut);
+            telemetry.addData("left pow", robot.driveTrain.left.getPower());
             telemetry.update();
 
         }
