@@ -27,10 +27,13 @@ public class PurePursuitProfile {
         return deccelDist;
     }
 
-    Point pos;
+    Point pos = new Point(0, 0);
     double dist, output, desiredOut, stDist, count, stoppingAccel;
     double previousSpeed, time, preTime, deltaT, currAcel;
-    boolean decel, fastDecel;
+    double angularSpeed;
+    double gearRatio = 2.0/3;
+    double wheelr = 2;
+    boolean decel = false, fastDecel = false, cruise, stopped;
 
     public double getOutput(Point position){
         if(count == 0){
@@ -42,10 +45,10 @@ public class PurePursuitProfile {
 
         dist = cal.PointDistance(pos, tgt);
 
-        stoppingAccel = (0 - (Math.pow(previousSpeed, 2))) / (2 * dist);
+        stoppingAccel = -((0 - (Math.pow(previousSpeed, 2))) / (2 * dist));
 
-        if(stoppingAccel < accel){
-            desiredOut = speed;
+        if(stoppingAccel < accel - 0.2){
+            cruise = true;
         } else if (stoppingAccel > accel - 0.02 && stoppingAccel < accel + 0.2){
             decel = true;
         } else if (stoppingAccel > accel + 0.2){
@@ -56,23 +59,33 @@ public class PurePursuitProfile {
         deltaT = time - preTime;
 
         if(decel){
-           output = -accel * deltaT + previousSpeed;
+            output = -accel * deltaT + previousSpeed;
+            decel = false;
         } else if(fastDecel){
             output = stoppingAccel * deltaT + previousSpeed;
+            fastDecel = false;
         }
 
-        if((previousSpeed - desiredOut) / deltaT > accel){
-            output = accel * deltaT + previousSpeed;
+        if(cruise){
+            if((Math.abs(previousSpeed - speed) / deltaT) > accel){
+                output = accel * deltaT + previousSpeed;
+            } else {
+                output = speed;
+            }
+            cruise = false;
         }
 
-        currAcel = previousSpeed - desiredOut / deltaT;
+        if(output > speed){
+            output = speed;
+        }
 
-        if(currAcel > accel){
-            output = accel * deltaT + previousSpeed;
+        if(output < 0.6 && cal.PointDistance(position, tgt) < 0.1){
+            stopped = true;
         }
 
         previousSpeed = output;
         preTime = time;
+
         return output;
     }
 }

@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.RobotFunctions.Calculators;
 import org.firstinspires.ftc.teamcode.RobotFunctions.Hardware;
+import org.firstinspires.ftc.teamcode.RobotFunctions.MotionStuff.PID;
 import org.firstinspires.ftc.teamcode.RobotFunctions.MotionStuff.PurePursuitProfile;
 import org.firstinspires.ftc.teamcode.RobotFunctions.Point;
 
@@ -24,7 +25,10 @@ public class PurePursuit extends LinearOpMode {
     double angularSpeed;
     double gearRatio = 2.0/3;
     double wheelr = 2;
-    boolean decel = false, fastDecel = false, cruise;
+    boolean decel = false, fastDecel = false, cruise, stopped;
+    PID heading = new PID(0.01, 0.000004, 0.0005, 0.2, -0.6, 0.6);
+    double angleTgt, headingOut;
+
 
     @Override
     public void runOpMode(){
@@ -37,8 +41,11 @@ public class PurePursuit extends LinearOpMode {
         telemetry.update();
 
         waitForStart();
+
+        stPos = robot.driveTrain.GetPosition(robot.sensors.getHeading());
+
         resetStartTime();
-        while(opModeIsActive()){
+        while(opModeIsActive() && !stopped){
             if(count == 0){
                 stDist = cal.PointDistance(stPos, tgt);
                 count++;
@@ -82,14 +89,9 @@ public class PurePursuit extends LinearOpMode {
                 output = speed;
             }
 
-            /*
-
-            currAcel = previousSpeed - desiredOut / deltaT;
-
-            if(currAcel > accel){
-                output = accel * deltaT + previousSpeed;
+            if(output < 0.6 && cal.PointDistance(robot.driveTrain.GetPosition(robot.sensors.getHeading()), tgt) < 0.1){
+                stopped = true;
             }
-            */
 
             angularSpeed = (output * 12) / wheelr / gearRatio;
 
