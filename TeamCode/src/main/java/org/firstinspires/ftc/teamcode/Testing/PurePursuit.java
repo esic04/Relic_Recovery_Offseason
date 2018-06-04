@@ -17,7 +17,7 @@ public class PurePursuit extends LinearOpMode {
     double accel = 1;
     Point stPos = new Point(0, 0);
     Calculators cal = new Calculators();
-    Point tgt = new Point(0, 4);
+    Point tgt = new Point(0, 3);
     double speed = 1.4;
     Point pos = new Point(0, 0);
     double dist, output, desiredOut, stDist, count, stoppingAccel;
@@ -33,64 +33,24 @@ public class PurePursuit extends LinearOpMode {
     @Override
     public void runOpMode(){
         robot.init(hardwareMap);
-        tgt.setPosition(0, 4);
+        tgt.setPosition(0, 3);
         pos.setPosition(robot.driveTrain.CalcPose(robot.sensors.getHeading()).getX(), robot.driveTrain.CalcPose(robot.sensors.getHeading()).getY());
         profile.setInputs(0.8, 1.2, tgt, pos);
 
         telemetry.addData("angle", robot.sensors.getHeading());
         telemetry.update();
-
+        stPos = robot.driveTrain.GetPosition(robot.sensors.getHeading());
         waitForStart();
 
-        stPos = robot.driveTrain.GetPosition(robot.sensors.getHeading());
-
         resetStartTime();
-        while(opModeIsActive() && !stopped){
-            if(count == 0){
-                stDist = cal.PointDistance(stPos, tgt);
-                count++;
-            }
-
+        while(opModeIsActive()){
             pos = robot.driveTrain.GetPosition(robot.sensors.getHeading());
 
-            dist = cal.PointDistance(pos, tgt);
+            output = profile.getOutput(robot.driveTrain.GetPosition(robot.sensors.getHeading()));
 
-            stoppingAccel = -((0 - (Math.pow(previousSpeed, 2))) / (2 * dist));
-
-            if(stoppingAccel < accel - 0.2){
-                cruise = true;
-            } else if (stoppingAccel > accel - 0.02 && stoppingAccel < accel + 0.2){
-                decel = true;
-            } else if (stoppingAccel > accel + 0.2){
-                fastDecel = true;
-            }
-
-            time = getRuntime();
-            deltaT = time - preTime;
-
-            if(decel){
-                output = -accel * deltaT + previousSpeed;
-                decel = false;
-            } else if(fastDecel){
-                output = stoppingAccel * deltaT + previousSpeed;
-                fastDecel = false;
-            }
-
-            if(cruise){
-                if((Math.abs(previousSpeed - speed) / deltaT) > accel){
-                    output = accel * deltaT + previousSpeed;
-                } else {
-                    output = speed;
-                }
-                cruise = false;
-            }
-
-            if(output > speed){
-                output = speed;
-            }
-
-            if(output < 0.6 && cal.PointDistance(robot.driveTrain.GetPosition(robot.sensors.getHeading()), tgt) < 0.1){
-                stopped = true;
+            if(cal.PointDistance(pos, tgt) < 0.4){
+                tgt.setPosition(-3, 3);
+                profile.setTarget(tgt);
             }
 
             angularSpeed = (output * 12) / wheelr / gearRatio;
@@ -99,15 +59,6 @@ public class PurePursuit extends LinearOpMode {
             robot.driveTrain.right.setVelocity(angularSpeed, AngleUnit.RADIANS);
             robot.driveTrain.frontLeft.setVelocity(angularSpeed, AngleUnit.RADIANS);
             robot.driveTrain.frontRight.setVelocity(angularSpeed, AngleUnit.RADIANS);
-
-            telemetry.addData("dist", dist);
-            telemetry.addData("output", output);
-            telemetry.addData("stoppping acceleration", stoppingAccel);
-            telemetry.addData("set desired output thingy", Math.abs((previousSpeed - desiredOut) / deltaT));
-            telemetry.update();
-
-            previousSpeed = output;
-            preTime = time;
 
         }
 
