@@ -20,45 +20,52 @@ public class PurePursuit extends LinearOpMode {
     Point tgt = new Point(0, 3);
     double speed = 1.4;
     Point pos = new Point(0, 0);
-    double dist, output, desiredOut, stDist, count, stoppingAccel;
-    double previousSpeed, time, preTime, deltaT, currAcel;
-    double angularSpeed;
+    double output;
+    double leftAngularSpeed, rightAngularSpeed;
     double gearRatio = 2.0/3;
     double wheelr = 2;
-    boolean decel = false, fastDecel = false, cruise, stopped;
+    double lookAhead;
+    double curvature;
+    double angleTgt;
+    double hdgPIDout;
     PID heading = new PID(0.01, 0.000004, 0.0005, 0.2, -0.6, 0.6);
-    double angleTgt, headingOut;
 
 
     @Override
     public void runOpMode(){
         robot.init(hardwareMap);
         tgt.setPosition(0, 3);
-        pos.setPosition(robot.driveTrain.CalcPose(robot.sensors.getHeading()).getX(), robot.driveTrain.CalcPose(robot.sensors.getHeading()).getY());
+        pos.setPosition(robot.GetPose().getX(), robot.GetPose().getY());
         profile.setInputs(0.8, 1.2, tgt, pos);
 
         telemetry.addData("angle", robot.sensors.getHeading());
         telemetry.update();
-        stPos = robot.driveTrain.GetPosition(robot.sensors.getHeading());
+        stPos = robot.GetPosition();
         waitForStart();
 
         resetStartTime();
         while(opModeIsActive()){
-            pos = robot.driveTrain.GetPosition(robot.sensors.getHeading());
+            pos = robot.GetPosition();
 
-            output = profile.getOutput(robot.driveTrain.GetPosition(robot.sensors.getHeading()));
+            output = profile.getOutput(robot.GetPosition());
 
             if(cal.PointDistance(pos, tgt) < 0.4){
                 tgt.setPosition(-3, 3);
                 profile.setTarget(tgt);
             }
 
-            angularSpeed = (output * 12) / wheelr / gearRatio;
+            curvature = (2 * robot.GetPosition().getX()) / (lookAhead * lookAhead);
+            angleTgt = curvature * 90;
 
-            robot.driveTrain.left.setVelocity(angularSpeed, AngleUnit.RADIANS);
-            robot.driveTrain.right.setVelocity(angularSpeed, AngleUnit.RADIANS);
-            robot.driveTrain.frontLeft.setVelocity(angularSpeed, AngleUnit.RADIANS);
-            robot.driveTrain.frontRight.setVelocity(angularSpeed, AngleUnit.RADIANS);
+            hdgPIDout = heading.getOutput(robot.sensors.getHeading(), angleTgt);
+
+            leftAngularSpeed = (output * 12 + hdgPIDout) / wheelr / gearRatio;
+            rightAngularSpeed = (output * 12 - hdgPIDout) / wheelr / gearRatio;
+
+            robot.driveTrain.left.setVelocity(leftAngularSpeed, AngleUnit.RADIANS);
+            robot.driveTrain.right.setVelocity(rightAngularSpeed, AngleUnit.RADIANS);
+            robot.driveTrain.frontLeft.setVelocity(leftAngularSpeed, AngleUnit.RADIANS);
+            robot.driveTrain.frontRight.setVelocity(rightAngularSpeed, AngleUnit.RADIANS);
 
         }
 

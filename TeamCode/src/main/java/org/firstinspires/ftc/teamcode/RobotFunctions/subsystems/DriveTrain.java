@@ -215,51 +215,6 @@ public class DriveTrain {
         return -frontRightSpeed;
     }
 
-    double Vr, Vl, Vrx, Vry = 0, omegaR;
-    double hdg;
-    double Vwx, Vwy;
-    double Xkp, Ykp, thetaK;
-    double currTime, preTime, deltaTime;
-    double width = 16.25 / 12;
-
-    Pose pos = new Pose(0, 0, 0);
-
-    public Pose CalcPose(double Heading){// equations found from https://answers.ros.org/question/231942/computing-odometry-from-two-velocities/
-        hdg = ((Heading + 90) % 360) * (Math.PI / 180); //shift angle 90 degrees then convert into radians
-
-        currTime = System.currentTimeMillis() / 1000.0;
-
-        Vr = (rightSpeed() + frontRightSpeed()) / 2;
-        Vl = (leftSpeed() + frontLeftSpeed()) / 2;
-
-        deltaTime = currTime - preTime;
-
-        Vrx = (Vr + Vl) / 2;
-        omegaR = (Vr - Vl) / width;
-
-        Vwx = Vrx * Math.cos(hdg) - Vry * Math.sin(hdg);
-        Vwy = Vrx * Math.sin(hdg) + Vry * Math.cos(hdg);
-
-        Xkp = Xkp + Vwx * deltaTime;
-        Ykp = Ykp + Vwy * deltaTime;
-
-        preTime = currTime;
-
-        pos.setPose(Xkp, Ykp, (Heading + 90) % 360);
-
-        return pos;
-    }
-
-    public Pose GetPose(double Heading){
-       return CalcPose(Heading);
-    }
-
-    Point position = new Point(0, 0);
-
-    public Point GetPosition(double Heading){
-        position.setPosition(CalcPose(Heading).getX(), CalcPose(Heading).getY());
-        return position;
-    }
 
 
 

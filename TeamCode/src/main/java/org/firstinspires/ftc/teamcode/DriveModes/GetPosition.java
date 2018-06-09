@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Testing;
+package org.firstinspires.ftc.teamcode.DriveModes;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -24,11 +24,11 @@ public class GetPosition extends OpMode {
     public void loop(){
         robot.driveTrain.arcadeDrive(gamepad1.left_stick_x, gamepad1.left_stick_y);
 
-        position = robot.driveTrain.GetPosition(robot.sensors.getHeading());
+        position = robot.GetPosition();
 
         telemetry.addData("x", position.getX());
         telemetry.addData("y", position.getY());
-        telemetry.addData("distance from start", cal.PointDistance(origin, robot.driveTrain.GetPosition(robot.sensors.getHeading())));
+        telemetry.addData("distance from start", cal.PointDistance(origin, robot.GetPosition()));
 
         telemetry.update();
 
