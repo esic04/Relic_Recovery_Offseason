@@ -18,23 +18,23 @@ public class PurePursuit extends LinearOpMode {
     Point stPos = new Point(0, 0);
     Calculators cal = new Calculators();
     Point tgt = new Point(0, 3);
+    Point tgt2 = new Point(-3, 3);
     double speed = 1.4;
     Point pos = new Point(0, 0);
     double output;
     double leftAngularSpeed, rightAngularSpeed;
     double gearRatio = 2.0/3;
     double wheelr = 2;
-    double lookAhead;
+    double lookAhead = 1;
     double curvature;
     double angleTgt;
     double hdgPIDout;
-    PID heading = new PID(0.01, 0.000004, 0.0005, 0.2, -0.6, 0.6);
+    PID heading = new PID(0.07, 0.000004, 0.0005, 0, 0, 0);
 
 
     @Override
     public void runOpMode(){
         robot.init(hardwareMap);
-        tgt.setPosition(0, 3);
         pos.setPosition(robot.GetPose().getX(), robot.GetPose().getY());
         profile.setInputs(0.8, 1.2, tgt, pos);
 
@@ -49,13 +49,16 @@ public class PurePursuit extends LinearOpMode {
 
             output = profile.getOutput(robot.GetPosition());
 
-            if(cal.PointDistance(pos, tgt) < 0.4){
-                tgt.setPosition(-3, 3);
-                profile.setTarget(tgt);
+            if(cal.PointDistance(pos, tgt) < 0.3){
+                profile.setTarget(tgt2);
             }
 
-            curvature = (2 * robot.GetPosition().getX()) / (lookAhead * lookAhead);
-            angleTgt = curvature * 90;
+            if(cal.PointDistance(robot.GetPosition(), tgt2) < 0.3){
+                requestOpModeStop();
+            }
+
+            curvature = (2 * (profile.getTarget().getX() - robot.GetPosition().getX())) / (lookAhead * lookAhead);
+            angleTgt = curvature * 45;
 
             hdgPIDout = heading.getOutput(robot.sensors.getHeading(), angleTgt);
 
@@ -67,6 +70,13 @@ public class PurePursuit extends LinearOpMode {
             robot.driveTrain.frontLeft.setVelocity(leftAngularSpeed, AngleUnit.RADIANS);
             robot.driveTrain.frontRight.setVelocity(rightAngularSpeed, AngleUnit.RADIANS);
 
+            telemetry.addData("output", output);
+            telemetry.addData("left angular speed", leftAngularSpeed);
+            telemetry.addData("angle tgt", angleTgt);
+            telemetry.addData("robot hdg", robot.sensors.getHeading());
+            telemetry.addData("robot x", robot.GetPosition().getX());
+            telemetry.addData("robot y", robot.GetPosition().getY());
+            telemetry.update();
         }
 
 

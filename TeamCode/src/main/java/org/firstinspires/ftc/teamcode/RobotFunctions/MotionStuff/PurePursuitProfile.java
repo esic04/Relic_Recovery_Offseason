@@ -18,6 +18,7 @@ public class PurePursuitProfile {
     public void setTarget(Point target){
         tgt = target;
     }
+    public Point getTarget(){return tgt;}
 
     double deccelDist, deccelTime;
 

@@ -13,7 +13,7 @@ public class PID {
         this.Kp = Kp;
         this.Ki = Ki;
         this.Kd = Kd;
-        Ilim = ILimit;
+        Ilim = ILimit; //set limits to 0 to disable
         outMin = OutputMin;
         outMax = OutputMax;
     }
