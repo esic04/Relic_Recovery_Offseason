@@ -45,13 +45,13 @@ public class DriveTrain {
     }
 
     public void arcadeDrive(double gamepadX, double gamepadY){//it drives
-        this.gamepadX = -gamepadX;
-        this.gamepadY = -gamepadY;
+        this.gamepadX = gamepadX;
+        this.gamepadY = gamepadY;
 
-        left.setPower(gamepadY - gamepadX);
-        right.setPower(gamepadY + gamepadX);
-        frontLeft.setPower(gamepadY - gamepadX);
-        frontRight.setPower(gamepadY + gamepadX);
+        left.setPower(-gamepadY + gamepadX);
+        right.setPower(-gamepadY - gamepadX);
+        frontLeft.setPower(-gamepadY + gamepadX);
+        frontRight.setPower(-gamepadY - gamepadX);
     }
 
     public void resetEncoders(){

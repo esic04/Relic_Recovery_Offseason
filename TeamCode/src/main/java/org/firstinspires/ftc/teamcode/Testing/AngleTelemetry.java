@@ -26,7 +26,7 @@ public class AngleTelemetry extends OpMode {
     }
 
     public void loop(){
-       telemetry.addData("angle", (robot.sensors.getHeading() + 90) % 360);
+       telemetry.addData("angle", robot.sensors.getHeading());
        telemetry.update();
     }
 

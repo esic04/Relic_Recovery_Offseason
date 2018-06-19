@@ -11,14 +11,8 @@ public class Hardware {
     public DriveTrain driveTrain;
     public Sensors sensors;
     HardwareMap hMap;
-    double Vr, Vl, Vrx, Vry = 0, omegaR;
-    double hdg;
-    double Vwx, Vwy;
-    double Xkp, Ykp, thetaK;
-    double currTime, preTime, deltaTime;
-    double width = 16.25 / 12;
-    Pose pos = new Pose(0, 0, 0);
-    Point position = new Point(0, 0);
+    Calculators calc = new Calculators();
+
 
     public void init(HardwareMap map){
         hMap = map; //stores hardware map
@@ -27,29 +21,37 @@ public class Hardware {
         driveTrain.frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         sensors = new Sensors(hMap);
     }
+    Pose pos = new Pose(0, 0, 0);
+    Point position = new Point(0, 0);
+    double dist;
+    double cl, cr, cfl, cfr; //current values
+    double dl, dr, dfl, dfr; //delta encoder distances for motors
+    double pl, pr, pfl, pfr; //previous encoder readings for all motors
+    double x, y;
+    double heading;
+    private Pose CalcPose(){
+        cl = driveTrain.left.getCurrentPosition(); cr = driveTrain.right.getCurrentPosition(); cfl = driveTrain.frontLeft.getCurrentPosition(); cfr = driveTrain.frontRight.getCurrentPosition();
+        dl = cl - pl; dr = cr - pr; dfl = cfl - pfl; dfr = cfr - pfr;
+        heading = sensors.getHeading();
+        dist = calc.Encoder2Ft((dl + dr + dfl + dfr) / 4);
 
-    public Pose CalcPose(){// equations found from https://answers.ros.org/question/231942/computing-odometry-from-two-velocities/
-        hdg = ((sensors.getHeading() + 90) % 360) * (Math.PI / 180); //shift angle 90 degrees then convert into radians
+        if(heading <= 360 && heading >= 270){
+            x -= Math.sin(heading * (Math.PI / 180) - 360) * dist; //converts heading to radians for cos, cos only works with radians
+            y -= (Math.cos(heading * (Math.PI / 180) - 360) * dist); //subtracts certain angle to make the angle 0-90
+        } else if(heading >= 180 && heading <= 270){
+            x -= Math.cos(heading * (Math.PI / 180) - 270) * dist;
+            y += Math.sin(heading * (Math.PI / 180) - 270) * dist;
+        } else if(heading >= 90 && heading <= 180){
+            x -= (Math.cos(heading * (Math.PI / 180) - 90) * dist);
+            y -= Math.sin(heading * (Math.PI / 180) - 90) * dist;
+        } else if(heading >= 0 && heading <= 90){
+            x -= (Math.sin(heading * (Math.PI / 180)) * dist);
+            y += Math.cos(heading * (Math.PI / 180)) * dist;
+        }
 
-        currTime = System.currentTimeMillis() / 1000.0;
+        pl = cl; pr = cr; pfl = cfl; pfr = cfr;
 
-        Vr = (driveTrain.rightSpeed() + driveTrain.frontRightSpeed()) / 2;
-        Vl = (driveTrain.leftSpeed() + driveTrain.frontLeftSpeed()) / 2;
-
-        deltaTime = currTime - preTime;
-
-        Vrx = (Vr + Vl) / 2;
-        omegaR = (Vr - Vl) / width;
-
-        Vwx = Vrx * Math.cos(hdg) - Vry * Math.sin(hdg);
-        Vwy = Vrx * Math.sin(hdg) + Vry * Math.cos(hdg);
-
-        Xkp = Xkp + Vwx * deltaTime;
-        Ykp = Ykp + Vwy * deltaTime;
-
-        preTime = currTime;
-
-        pos.setPose(Xkp, Ykp, (sensors.getHeading() + 90) % 360);
+        pos.setPose(x, y, heading);
 
         return pos;
     }
