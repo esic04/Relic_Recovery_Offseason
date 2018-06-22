@@ -12,6 +12,7 @@ public class Hardware {
     public Sensors sensors;
     HardwareMap hMap;
     Calculators calc = new Calculators();
+    double distBetweenWheels = 31.25; //inches
 
 
     public void init(HardwareMap map){
@@ -23,31 +24,22 @@ public class Hardware {
     }
     Pose pos = new Pose(0, 0, 0);
     Point position = new Point(0, 0);
-    double dist;
+    double dist, leftDist, rightDist;
     double cl, cr, cfl, cfr; //current values
     double dl, dr, dfl, dfr; //delta encoder distances for motors
     double pl, pr, pfl, pfr; //previous encoder readings for all motors
-    double x, y;
-    double heading;
+    double x, y, prevX, prevY;
+    double heading, prevHeading;
     private Pose CalcPose(){
         cl = driveTrain.left.getCurrentPosition(); cr = driveTrain.right.getCurrentPosition(); cfl = driveTrain.frontLeft.getCurrentPosition(); cfr = driveTrain.frontRight.getCurrentPosition();
         dl = cl - pl; dr = cr - pr; dfl = cfl - pfl; dfr = cfr - pfr;
-        heading = sensors.getHeading();
         dist = calc.Encoder2Ft((dl + dr + dfl + dfr) / 4);
+        leftDist = calc.Encoder2Ft((dl + dfl) / 2);
+        rightDist = calc.Encoder2Ft((dr + dfr) / 2);
 
-        if(heading <= 360 && heading >= 270){
-            x -= Math.sin(heading * (Math.PI / 180) - 360) * dist; //converts heading to radians for cos, cos only works with radians
-            y -= (Math.cos(heading * (Math.PI / 180) - 360) * dist); //subtracts certain angle to make the angle 0-90
-        } else if(heading >= 180 && heading <= 270){
-            x -= Math.cos(heading * (Math.PI / 180) - 270) * dist;
-            y += Math.sin(heading * (Math.PI / 180) - 270) * dist;
-        } else if(heading >= 90 && heading <= 180){
-            x -= (Math.cos(heading * (Math.PI / 180) - 90) * dist);
-            y -= Math.sin(heading * (Math.PI / 180) - 90) * dist;
-        } else if(heading >= 0 && heading <= 90){
-            x -= (Math.sin(heading * (Math.PI / 180)) * dist);
-            y += Math.cos(heading * (Math.PI / 180)) * dist;
-        }
+        heading = prevHeading + ((rightDist - leftDist) / (distBetweenWheels / 12));
+        x = prevX + dist * Math.cos(prevHeading);
+        y = prevY + dist * Math.sin(prevHeading);
 
         pl = cl; pr = cr; pfl = cfl; pfr = cfr;
 

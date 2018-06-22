@@ -13,4 +13,5 @@ apply from: '../build.common.gradle'
 
 dependencies {
     implementation project(':openCVLibrary341')
+    implementation files('/Users/ethan/Desktop/Android_Studio_Stuff/Pathfinder-Java.jar')
 }
