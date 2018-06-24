@@ -27,6 +27,12 @@ public class PurePursuit extends LinearOpMode {
     double wheelr = 2;
     double lookAhead = 0.9;
     double curvature;
+    double[] line1 = new double[1]; //slope, then y int
+    double[] line2 = new double[1]; //direct lines of path
+    double[] line3 = new double[1]; //perpendicular line from robot to path line
+    Point path = new Point(0, 0); //point on path closest to robot
+    Point robotTgt = new Point(0, 0);
+    double x, y; //x and y values of the path point
     double angleTgt;
     double hdgPIDout;
     PID heading = new PID(0.03, 0.000001, 0.0005, 0, 0, 0);
@@ -41,6 +47,13 @@ public class PurePursuit extends LinearOpMode {
         telemetry.addData("angle", robot.sensors.getHeading());
         telemetry.update();
         stPos = robot.GetPosition();
+        robotTgt = tgt;
+
+        line1[0] = (tgt.getY() - stPos.getY()) / (tgt.getX() - stPos.getX());
+        line1[1] = tgt.getY() - (line1[0] * tgt.getX());
+        line2[0] = (tgt2.getY() - tgt.getY()) / (tgt2.getX() - tgt.getX());
+        line2[1] = tgt2.getY() - (line2[0] * tgt2.getX());
+
         waitForStart();
 
         resetStartTime();
@@ -53,7 +66,38 @@ public class PurePursuit extends LinearOpMode {
                 requestOpModeStop();
             }
 
-            curvature = (2 * (profile.getTarget().getX() - robot.GetPosition().getX())) / (lookAhead * lookAhead);
+            if(cal.PointDistance(robot.GetPosition(), tgt) < 0.3){
+                robotTgt = tgt2;
+            }
+
+            if(robotTgt == tgt){
+                if(Double.isNaN(line1[0])){ //checks if line is vertical, if so set perpendicular line's slope to 0
+                    line3[0] = 0;
+                }else {
+                    line3[0] = 1 / line1[0];
+                }
+                line3[1] = pos.getY() - (line3[0] * pos.getX());
+            } else if(robotTgt == tgt2){
+                if(Double.isNaN(line2[0])){
+                    line3[0] = 0;
+                }else {
+                    line3[0] = 1 / line2[0];
+                }
+                line3[1] = pos.getY() - (line3[0] * pos.getX());
+            }
+
+            if(robotTgt == tgt){
+                x = (line1[1] - line3[1]) / (line1[0] - line3[0]);
+                y = (line1[0] * x) + line1[1];
+            } else if(robotTgt == tgt2){
+                x = (line2[1] - line3[1]) / (line2[0] - line3[0]);
+                y = (line2[0] * x) + line2[1];
+            }
+
+            path.setPosition(x, y);
+
+
+            curvature = 2 * (cal.PointDistance(pos, path)) / (lookAhead * lookAhead);
             angleTgt = (curvature * 35) + robot.sensors.getHeading();
 
             hdgPIDout = heading.getOutput(robot.sensors.getHeading(), angleTgt);
