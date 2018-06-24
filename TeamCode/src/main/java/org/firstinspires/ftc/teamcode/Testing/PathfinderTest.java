@@ -24,6 +24,8 @@ public class PathfinderTest extends LinearOpMode {
     Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.01, 1, 4, 60);
 
     public void runOpMode(){
+        waitForStart();
+
         Trajectory trajectory = Pathfinder.generate(points, config);
 
         for (int i = 0; i < trajectory.length(); i++) {

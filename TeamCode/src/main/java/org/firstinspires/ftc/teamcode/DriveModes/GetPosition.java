@@ -28,10 +28,10 @@ public class GetPosition extends OpMode {
 
         telemetry.addData("x", position.getX());
         telemetry.addData("y", position.getY());
-        telemetry.addData("heading", robot.sensors.getHeading());
+        //telemetry.addData("heading", robot.sensors.getHeading());
         telemetry.addData("left encoder", robot.driveTrain.left.getCurrentPosition());
         telemetry.addData("right encoder", robot.driveTrain.right.getCurrentPosition());
-        telemetry.addData("distance from start", cal.PointDistance(origin, robot.GetPosition()));
+        telemetry.addData("distance from start", cal.PointDistance(origin, position));
 
         telemetry.update();
 

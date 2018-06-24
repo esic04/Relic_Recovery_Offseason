@@ -12,7 +12,7 @@ public class Hardware {
     public Sensors sensors;
     HardwareMap hMap;
     Calculators calc = new Calculators();
-    double distBetweenWheels = 31.25; //inches
+    double distBetweenWheels = 16.25; //inches
 
 
     public void init(HardwareMap map){
@@ -33,15 +33,18 @@ public class Hardware {
     private Pose CalcPose(){
         cl = driveTrain.left.getCurrentPosition(); cr = driveTrain.right.getCurrentPosition(); cfl = driveTrain.frontLeft.getCurrentPosition(); cfr = driveTrain.frontRight.getCurrentPosition();
         dl = cl - pl; dr = cr - pr; dfl = cfl - pfl; dfr = cfr - pfr;
+
         dist = calc.Encoder2Ft((dl + dr + dfl + dfr) / 4);
         leftDist = calc.Encoder2Ft((dl + dfl) / 2);
         rightDist = calc.Encoder2Ft((dr + dfr) / 2);
 
         heading = prevHeading + ((rightDist - leftDist) / (distBetweenWheels / 12));
-        x = prevX + dist * Math.cos(prevHeading);
-        y = prevY + dist * Math.sin(prevHeading);
+        x = prevX - dist * Math.sin(prevHeading);
+        y = prevY + dist * Math.cos(prevHeading);
 
         pl = cl; pr = cr; pfl = cfl; pfr = cfr;
+
+        prevX = x; prevY = y; prevHeading = heading;
 
         pos.setPose(x, y, heading);
 
