@@ -35,6 +35,7 @@ public class PurePursuit extends LinearOpMode {
     double x, y; //x and y values of the path point
     double dist; //dist from path point to robot
     double angleTgt;
+    double accumulatedHeading;
     double hdgPIDout;
     PID heading = new PID(0.01, 0.000001, 0.0005, 0, 0, 0);
 
@@ -104,8 +105,9 @@ public class PurePursuit extends LinearOpMode {
 
             curvature = 2 * (dist) / (lookAhead * lookAhead);
             angleTgt = (curvature * 45) + robot.sensors.getHeading();
+            accumulatedHeading += robot.sensors.getHeading();
 
-            hdgPIDout = heading.getOutput(robot.sensors.getHeading(), angleTgt);
+            hdgPIDout = heading.getOutput(accumulatedHeading, angleTgt); //test today
 
             leftAngularSpeed = (output * 12 - hdgPIDout) / wheelr / gearRatio;
             rightAngularSpeed = (output * 12 + hdgPIDout) / wheelr / gearRatio;
