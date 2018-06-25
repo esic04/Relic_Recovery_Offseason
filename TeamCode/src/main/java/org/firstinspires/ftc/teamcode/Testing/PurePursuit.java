@@ -25,17 +25,18 @@ public class PurePursuit extends LinearOpMode {
     double leftAngularSpeed, rightAngularSpeed;
     double gearRatio = 2.0/3;
     double wheelr = 2;
-    double lookAhead = 0.9;
+    double lookAhead = 0.5;
     double curvature;
-    double[] line1 = new double[1]; //slope, then y int
-    double[] line2 = new double[1]; //direct lines of path
-    double[] line3 = new double[1]; //perpendicular line from robot to path line
+    double[] line1 = new double[2]; //slope, then y int
+    double[] line2 = new double[2]; //direct lines of path
+    double[] line3 = new double[2]; //perpendicular line from robot to path line
     Point path = new Point(0, 0); //point on path closest to robot
     Point robotTgt = new Point(0, 0);
     double x, y; //x and y values of the path point
+    double dist; //dist from path point to robot
     double angleTgt;
     double hdgPIDout;
-    PID heading = new PID(0.03, 0.000001, 0.0005, 0, 0, 0);
+    PID heading = new PID(0.01, 0.000001, 0.0005, 0, 0, 0);
 
 
     @Override
@@ -95,15 +96,19 @@ public class PurePursuit extends LinearOpMode {
             }
 
             path.setPosition(x, y);
+            dist = cal.PointDistance(pos, path);
 
+            if(Double.isNaN(dist)){
+                dist = 0;
+            }
 
-            curvature = 2 * (cal.PointDistance(pos, path)) / (lookAhead * lookAhead);
-            angleTgt = (curvature * 35) + robot.sensors.getHeading();
+            curvature = 2 * (dist) / (lookAhead * lookAhead);
+            angleTgt = (curvature * 45) + robot.sensors.getHeading();
 
             hdgPIDout = heading.getOutput(robot.sensors.getHeading(), angleTgt);
 
-            leftAngularSpeed = (output * 12 + hdgPIDout) / wheelr / gearRatio;
-            rightAngularSpeed = (output * 12 - hdgPIDout) / wheelr / gearRatio;
+            leftAngularSpeed = (output * 12 - hdgPIDout) / wheelr / gearRatio;
+            rightAngularSpeed = (output * 12 + hdgPIDout) / wheelr / gearRatio;
 
             robot.driveTrain.left.setVelocity(leftAngularSpeed, AngleUnit.RADIANS);
             robot.driveTrain.right.setVelocity(rightAngularSpeed, AngleUnit.RADIANS);
@@ -115,8 +120,8 @@ public class PurePursuit extends LinearOpMode {
             telemetry.addData("left angular speed", leftAngularSpeed);
             telemetry.addData("angle tgt", angleTgt);
             telemetry.addData("robot hdg", robot.sensors.getHeading());
-            telemetry.addData("robot x", robot.GetPosition().getX());
-            telemetry.addData("robot y", robot.GetPosition().getY());
+            telemetry.addData("path x", x);
+            telemetry.addData("path y", y);
             telemetry.update();
         }
 
