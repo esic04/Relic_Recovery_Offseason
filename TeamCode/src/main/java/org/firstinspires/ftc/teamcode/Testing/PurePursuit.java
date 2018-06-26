@@ -35,7 +35,7 @@ public class PurePursuit extends LinearOpMode {
     double x, y; //x and y values of the path point
     double dist; //dist from path point to robot
     double angleTgt;
-    double accumulatedHeading;
+    double lineAngle;
     double hdgPIDout;
     PID heading = new PID(0.01, 0.000001, 0.0005, 0, 0, 0);
 
@@ -103,8 +103,22 @@ public class PurePursuit extends LinearOpMode {
                 dist = 0;
             }
 
+            if(robotTgt == tgt){
+                if(Double.isNaN(line1[0])){
+                    lineAngle = 0;
+                }else {
+                    lineAngle = ((-1 * Math.atan2(tgt.getX() - stPos.getX(), tgt.getY() - stPos.getY())) * (180 / Math.PI) + 90) % 360;
+                }
+            } else if(robotTgt == tgt2){
+                if(Double.isNaN(line2[0])){
+                    lineAngle = 0;
+                }else {
+                    lineAngle = ((-1 * Math.atan2(tgt2.getX() - tgt.getX(), tgt2.getY() - tgt.getY())) * (180 / Math.PI) + 90) % 360;
+                }
+            }
+
             curvature = 2 * (dist) / (lookAhead * lookAhead);
-            angleTgt = (curvature * 35) + robot.sensors.getHeading();
+            angleTgt = (curvature * 35) + lineAngle;
 
             hdgPIDout = heading.getOutput(robot.sensors.getHeading(), angleTgt);
 
