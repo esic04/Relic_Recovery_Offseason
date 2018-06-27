@@ -25,7 +25,7 @@ public class PurePursuit extends LinearOpMode {
     double leftAngularSpeed, rightAngularSpeed;
     double gearRatio = 2.0/3;
     double wheelr = 2;
-    double lookAhead = 0.5;
+    double lookAhead = 1;
     double curvature;
     double[] line1 = new double[2]; //slope, then y int
     double[] line2 = new double[2]; //direct lines of path
@@ -37,7 +37,7 @@ public class PurePursuit extends LinearOpMode {
     double angleTgt;
     double lineAngle;
     double hdgPIDout;
-    PID heading = new PID(0.01, 0.000001, 0.0005, 0, 0, 0);
+    PID heading = new PID(0.05, 0.000001, 0.000, 0, 0, 0);
 
 
     @Override
@@ -73,14 +73,14 @@ public class PurePursuit extends LinearOpMode {
             }
 
             if(robotTgt == tgt){
-                if(Double.isNaN(line1[0])){ //checks if line is vertical, if so set perpendicular line's slope to 0
+                if(Double.isNaN(line1[0]) || Double.isInfinite(line1[0])){ //checks if line is vertical, if so set perpendicular line's slope to 0
                     line3[0] = 0;
                 }else {
                     line3[0] = 1 / line1[0];
                 }
                 line3[1] = pos.getY() - (line3[0] * pos.getX());
             } else if(robotTgt == tgt2){
-                if(Double.isNaN(line2[0])){
+                if(Double.isNaN(line2[0]) || Double.isInfinite(line2[0])){
                     line3[0] = 0;
                 }else {
                     line3[0] = 1 / line2[0];
@@ -89,28 +89,34 @@ public class PurePursuit extends LinearOpMode {
             }
 
             if(robotTgt == tgt){
-                x = (line1[1] - line3[1]) / (line1[0] - line3[0]);
-                y = (line1[0] * x) + line1[1];
+                if(Double.isNaN(line1[0]) || Double.isInfinite(line1[0])){
+                    x = tgt.getX();
+                    y = x + line3[1];
+                } else{
+                    x = (line1[1] - line3[1]) / (line1[0] - line3[0]);
+                    y = (line1[0] * x) + line1[1];
+                }
             } else if(robotTgt == tgt2){
-                x = (line2[1] - line3[1]) / (line2[0] - line3[0]);
-                y = (line2[0] * x) + line2[1];
+                if(Double.isNaN(line2[0]) || Double.isInfinite(line2[0])){
+                    x = tgt2.getX();
+                    y = x + line3[1];
+                } else{
+                    x = (line2[1] - line3[1]) / (line2[0] - line3[0]);
+                    y = (line2[0] * x) + line2[1];
+                }
             }
 
             path.setPosition(x, y);
             dist = cal.PointDistance(pos, path);
 
-            if(Double.isNaN(dist)){
-                dist = 0;
-            }
-
             if(robotTgt == tgt){
-                if(Double.isNaN(line1[0])){
+                if(Double.isNaN(line1[0]) || Double.isInfinite(line1[0])){
                     lineAngle = 0;
                 }else {
                     lineAngle = ((-1 * Math.atan2(tgt.getX() - stPos.getX(), tgt.getY() - stPos.getY())) * (180 / Math.PI) + 90) % 360;
                 }
             } else if(robotTgt == tgt2){
-                if(Double.isNaN(line2[0])){
+                if(Double.isNaN(line2[0]) || Double.isInfinite(line2[0])){
                     lineAngle = 0;
                 }else {
                     lineAngle = ((-1 * Math.atan2(tgt2.getX() - tgt.getX(), tgt2.getY() - tgt.getY())) * (180 / Math.PI) + 90) % 360;
@@ -118,9 +124,9 @@ public class PurePursuit extends LinearOpMode {
             }
 
             curvature = 2 * (dist) / (lookAhead * lookAhead);
-            angleTgt = (curvature * 35) + lineAngle;
+            angleTgt = (curvature * 20) - lineAngle;
 
-            hdgPIDout = heading.getOutput(robot.sensors.getHeading(), angleTgt);
+            hdgPIDout = heading.getOutput(-robot.sensors.getHeading(), angleTgt);
 
             leftAngularSpeed = (output * 12 - hdgPIDout) / wheelr / gearRatio;
             rightAngularSpeed = (output * 12 + hdgPIDout) / wheelr / gearRatio;
@@ -131,8 +137,9 @@ public class PurePursuit extends LinearOpMode {
             robot.driveTrain.frontRight.setVelocity(rightAngularSpeed, AngleUnit.RADIANS);
 
             telemetry.addData("output", output);
-            telemetry.addData("targetx", profile.getTarget().getX());
-            telemetry.addData("left angular speed", leftAngularSpeed);
+            telemetry.addData("line angle", lineAngle);
+            telemetry.addData("line1 slope", line1[0]);
+            telemetry.addData("line3 y int", line3[1]);
             telemetry.addData("angle tgt", angleTgt);
             telemetry.addData("robot hdg", robot.sensors.getHeading());
             telemetry.addData("path x", x);
