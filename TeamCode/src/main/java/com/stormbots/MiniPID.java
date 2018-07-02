@@ -62,7 +62,7 @@ public class MiniPID{
 	 * @param p Proportional gain. Large if large difference between setpoint and target. 
 	 * @param i Integral gain.  Becomes large if setpoint cannot reach target quickly. 
 	 * @param d Derivative gain. Responds quickly to large changes in error. Small values prevents P and I terms from causing overshoot.
-	 * @param f Feed-forward gain. Open loop "best guess" for the output should be. Only useful if setpoint represents a rate.
+	 * @param f Feed-forward gain. OpenCVtest loop "best guess" for the output should be. Only useful if setpoint represents a rate.
 	 */
 	public MiniPID(double p, double i, double d, double f){
 		P=p; I=i; D=d; F=f;
@@ -167,7 +167,7 @@ public class MiniPID{
 	 * @param p Proportional gain. Large if large difference between setpoint and target. 
 	 * @param i Integral gain.  Becomes large if setpoint cannot reach target quickly. 
 	 * @param d Derivative gain. Responds quickly to large changes in error. Small values prevents P and I terms from causing overshoot.
-	 * @param f Feed-forward gain. Open loop "best guess" for the output should be. Only useful if setpoint represents a rate.
+	 * @param f Feed-forward gain. OpenCVtest loop "best guess" for the output should be. Only useful if setpoint represents a rate.
 	 */
 	public void setPID(double p, double i, double d,double f){
 		P=p;D=d;F=f;
