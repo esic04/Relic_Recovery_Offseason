@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.RobotFunctions.FalconVision.Detectors;
 
 import org.firstinspires.ftc.teamcode.RobotFunctions.FalconVision.OpenCVpipeline;
+import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Scalar;
@@ -14,8 +15,11 @@ public class DrawEdges extends OpenCVpipeline {
 
     private Mat grayScale = new Mat();
     private Mat blurred = new Mat();
+    private Mat filtered = new Mat();
     private Mat edges = new Mat();
     private List<MatOfPoint> contours = new ArrayList<>();
+    private Scalar lowFilter = new Scalar(97, 107, 62);
+    private Scalar highFilter = new Scalar(136, 253, 255);
     private int maxAreaID;
     private double maxVal;
 
@@ -25,7 +29,8 @@ public class DrawEdges extends OpenCVpipeline {
         Imgproc.cvtColor(rgba, grayScale, Imgproc.COLOR_BGR2GRAY);
         Imgproc.GaussianBlur(grayScale, blurred, new Size(5, 5), 0, 0);
         Imgproc.Canny(blurred, edges, 20, 150);
-        Imgproc.findContours(blurred, contours, new Mat(), Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
+        Core.inRange(blurred, lowFilter, highFilter, filtered);
+        Imgproc.findContours(filtered, contours, new Mat(), Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
 
         for (int contourId = 0; contourId < contours.size(); contourId++){
             double contourArea = Imgproc.contourArea(contours.get(contourId));
