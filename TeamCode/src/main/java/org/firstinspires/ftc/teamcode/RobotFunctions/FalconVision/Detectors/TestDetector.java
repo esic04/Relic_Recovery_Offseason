@@ -16,7 +16,7 @@ public class TestDetector extends OpenCVpipeline {
     public Mat processFrame(Mat rgba, Mat gray) {
 
         Imgproc.cvtColor(rgba, hsv, Imgproc.COLOR_RGB2HSV, 3);
-        Core.inRange(hsv, new Scalar(90, 128, 30), new Scalar(170, 255, 255), filtered);
+        Core.inRange(hsv, new Scalar(18, 73, 73), new Scalar(61, 31, 255), filtered); //takes scalar input as rgb I think, not hsv
         Imgproc.cvtColor(filtered, filtered_rgba, Imgproc.COLOR_GRAY2RGBA);
         return filtered_rgba;
     }
