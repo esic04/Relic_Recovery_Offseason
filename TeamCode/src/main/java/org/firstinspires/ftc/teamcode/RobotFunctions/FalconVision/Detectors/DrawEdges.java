@@ -13,22 +13,22 @@ import java.util.List;
 
 public class DrawEdges extends OpenCVpipeline {
 
-    private Mat grayScale = new Mat();
+    private Mat rgba = new Mat();
     private Mat blurred = new Mat();
+    private Mat hsv = new Mat();
     private Mat filtered = new Mat();
     private Mat edges = new Mat();
     private List<MatOfPoint> contours = new ArrayList<>();
-    private Scalar lowFilter = new Scalar(97, 107, 62);
-    private Scalar highFilter = new Scalar(136, 253, 255);
+    private Scalar lowFilter = new Scalar(100, 200, 90);
+    private Scalar highFilter = new Scalar(140, 255, 255);
     private int maxAreaID;
     private double maxVal;
 
 
     public Mat processFrame(Mat rgba, Mat gray){
-
-        Imgproc.cvtColor(rgba, grayScale, Imgproc.COLOR_BGR2GRAY);
-        Imgproc.GaussianBlur(grayScale, blurred, new Size(5, 5), 0, 0);
-        Imgproc.Canny(blurred, edges, 20, 150);
+        this.rgba = rgba;
+        Imgproc.cvtColor(rgba, hsv, Imgproc.COLOR_RGB2HSV, 3);
+        Imgproc.blur(hsv, blurred, new Size(5, 5));
         Core.inRange(blurred, lowFilter, highFilter, filtered);
         Imgproc.findContours(filtered, contours, new Mat(), Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
 
@@ -39,9 +39,11 @@ public class DrawEdges extends OpenCVpipeline {
                 maxVal = contourArea;
                 maxAreaID = contourId;
             }
-        }
 
-        Imgproc.drawContours(rgba, contours, maxAreaID, new Scalar(0, 102, 255), 5);
+        }
+        Imgproc.drawContours(rgba, contours, maxAreaID, new Scalar(255, 0, 0), 5);
+        maxVal = 0; //resets max contour area after finding largest contour
+        maxAreaID = 0;
 
         return rgba;
     }
