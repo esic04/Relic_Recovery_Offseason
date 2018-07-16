@@ -16,6 +16,7 @@ public abstract class OpenCVpipeline implements CameraBridgeViewBase.CvCameraVie
     private ViewDisplay viewDisplay;
     private boolean inited;
     private JavaCameraView cameraView;
+    public boolean stopped;
 
     public void init(Context context, ViewDisplay viewDisplay, final int cameraIndex){
         this.context = context;
@@ -31,6 +32,7 @@ public abstract class OpenCVpipeline implements CameraBridgeViewBase.CvCameraVie
                 cameraView.setCameraIndex(cameraIndex);
                 cameraView.setCvCameraViewListener(self);
                 inited = true;
+                stopped = false;
             }
         });
     }
@@ -59,7 +61,9 @@ public abstract class OpenCVpipeline implements CameraBridgeViewBase.CvCameraVie
 
     public abstract Mat processFrame(Mat rgba, Mat gray); // is implemented in detector class and does the processing for the image
 
-    public void onCameraViewStopped() { // override this and add code if you need stuff to happen when camera stopped
+    @Override
+    public void onCameraViewStopped() {// override this and add code if you need stuff to happen when camera stopped
+        stopped = true;
     }
 
 

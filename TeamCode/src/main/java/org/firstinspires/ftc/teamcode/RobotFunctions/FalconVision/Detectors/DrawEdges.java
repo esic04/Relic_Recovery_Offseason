@@ -40,6 +40,8 @@ public class DrawEdges extends OpenCVpipeline {
                 maxAreaID = contourId;
             }
 
+            if(stopped){break;}
+
         }
         Imgproc.drawContours(rgba, contours, maxAreaID, new Scalar(255, 0, 0), 5);
         maxVal = 0; //resets max contour area after finding largest contour
