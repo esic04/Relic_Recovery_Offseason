@@ -49,6 +49,7 @@ public abstract class OpenCVpipeline implements CameraBridgeViewBase.CvCameraVie
     public void disable() {
         cameraView.disableView();
         viewDisplay.removeCurrentView(context);
+        stopped = true;
     }
 
 
