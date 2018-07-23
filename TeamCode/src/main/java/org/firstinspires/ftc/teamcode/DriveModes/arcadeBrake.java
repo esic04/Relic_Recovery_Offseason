@@ -3,14 +3,14 @@ package org.firstinspires.ftc.teamcode.DriveModes;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.RobotFunctions.Hardware;
+import org.firstinspires.ftc.teamcode.RobotFunctions.TankHardware;
 
 /**
  * Created by ethan on 3/9/18.
  */
 @TeleOp
 public class arcadeBrake extends OpMode {
-    Hardware robot = new Hardware();
+    TankHardware robot = new TankHardware();
     @Override
     public void init(){
         robot.init(hardwareMap);
