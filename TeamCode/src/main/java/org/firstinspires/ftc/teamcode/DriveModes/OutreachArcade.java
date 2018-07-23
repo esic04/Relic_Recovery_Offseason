@@ -4,10 +4,11 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import org.firstinspires.ftc.teamcode.RobotFunctions.Hardware;
+import org.firstinspires.ftc.teamcode.RobotFunctions.TankHardware;
+
 @TeleOp
 public class OutreachArcade extends OpMode {
-    Hardware robot = new Hardware();
+    TankHardware robot = new TankHardware();
 
     @Override
     public void init(){

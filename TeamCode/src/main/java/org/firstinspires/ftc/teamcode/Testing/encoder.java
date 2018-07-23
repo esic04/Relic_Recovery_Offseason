@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.teamcode.RobotFunctions.Hardware;
+import org.firstinspires.ftc.teamcode.RobotFunctions.TankHardware;
 import org.firstinspires.ftc.teamcode.RobotFunctions.Calculators;
 
 /**
@@ -22,7 +22,7 @@ public class encoder extends OpMode {
     double leftDist;
     double rightDist;
 
-    Hardware h = new Hardware();
+    TankHardware h = new TankHardware();
 
     Calculators convert = new Calculators();
     @Override

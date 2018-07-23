@@ -2,11 +2,11 @@ package org.firstinspires.ftc.teamcode.Testing;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.firstinspires.ftc.teamcode.RobotFunctions.Hardware;
+import org.firstinspires.ftc.teamcode.RobotFunctions.TankHardware;
 import org.firstinspires.ftc.teamcode.RobotFunctions.Calculators;
 
 public class DriveDistance extends OpMode {
-    Hardware robot = new Hardware();
+    TankHardware robot = new TankHardware();
     Calculators cal = new Calculators();
 
     @Override

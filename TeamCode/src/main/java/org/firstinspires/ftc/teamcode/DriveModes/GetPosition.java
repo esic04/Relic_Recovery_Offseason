@@ -4,12 +4,12 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.RobotFunctions.Calculators;
-import org.firstinspires.ftc.teamcode.RobotFunctions.Hardware;
+import org.firstinspires.ftc.teamcode.RobotFunctions.TankHardware;
 import org.firstinspires.ftc.teamcode.RobotFunctions.Point;
 
 @TeleOp
 public class GetPosition extends OpMode {
-    Hardware robot = new Hardware();
+    TankHardware robot = new TankHardware();
     Point position = new Point(0, 0);
     Calculators cal = new Calculators();
     Point origin = new Point(0, 0);

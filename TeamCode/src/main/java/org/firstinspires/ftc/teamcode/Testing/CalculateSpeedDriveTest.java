@@ -4,15 +4,16 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.RobotFunctions.DataLogger;
-import org.firstinspires.ftc.teamcode.RobotFunctions.Hardware;
+import org.firstinspires.ftc.teamcode.RobotFunctions.TankHardware;
 import org.firstinspires.ftc.teamcode.RobotFunctions.Calculators;
+
 @TeleOp
 public class CalculateSpeedDriveTest extends OpMode {//does what the name says
     DataLogger data = new DataLogger("speed test");
     Calculators cal = new Calculators();
     double leftSpeed, rightSpeed, preTime, leftPreDist, rightPreDist, leftDist, rightDist, curTime, timeDiff, leftDistDiff, rightDistDiff;
     int count;
-    Hardware robot = new Hardware();
+    TankHardware robot = new TankHardware();
     @Override
     public void init(){
         robot.init(hardwareMap);

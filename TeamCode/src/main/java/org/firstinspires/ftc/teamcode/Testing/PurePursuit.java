@@ -5,14 +5,14 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.RobotFunctions.Calculators;
-import org.firstinspires.ftc.teamcode.RobotFunctions.Hardware;
+import org.firstinspires.ftc.teamcode.RobotFunctions.TankHardware;
 import org.firstinspires.ftc.teamcode.RobotFunctions.MotionStuff.PID;
 import org.firstinspires.ftc.teamcode.RobotFunctions.MotionStuff.PurePursuitProfile;
 import org.firstinspires.ftc.teamcode.RobotFunctions.Point;
 
 @Autonomous
 public class PurePursuit extends LinearOpMode {
-    Hardware robot = new Hardware();
+    TankHardware robot = new TankHardware();
     PurePursuitProfile profile = new PurePursuitProfile();
     double accel = 1;
     Point stPos = new Point(0, 0);

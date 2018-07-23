@@ -2,19 +2,17 @@ package org.firstinspires.ftc.teamcode.Testing;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.stormbots.MiniPID;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.RobotFunctions.DataLogger;
-import org.firstinspires.ftc.teamcode.RobotFunctions.Hardware;
+import org.firstinspires.ftc.teamcode.RobotFunctions.TankHardware;
 import org.firstinspires.ftc.teamcode.RobotFunctions.MotionStuff.PID;
 import org.firstinspires.ftc.teamcode.RobotFunctions.MotionStuff.ProfileGenerator;
 import org.firstinspires.ftc.teamcode.RobotFunctions.subsystems.DriveTrain;
 
 @Autonomous
 public class ProfileRunTest extends LinearOpMode {
-    Hardware robot = new Hardware();
+    TankHardware robot = new TankHardware();
     ProfileGenerator profile = new ProfileGenerator();
     DataLogger data = new DataLogger("motion profile");
 

@@ -22,7 +22,7 @@ public class DriveTrain {
     MiniPID pid1 = new MiniPID(0, 0, 0);
     MiniPID pid2 = new MiniPID(0, 0, 0);
     MiniPID pid3 = new MiniPID(0, 0, 0);
-    MiniPID pid4 = new MiniPID(0, 0, 0);; //1= back left, 2 = front left, 3 = back right, 4 = front right
+    MiniPID pid4 = new MiniPID(0, 0, 0); //1= back left, 2 = front left, 3 = back right, 4 = front right
 
     double leftOut, rightOut, frontLeftOut, frontRightOut;
 
