@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import static java.lang.Math.PI;
 import static java.lang.Math.abs;
 import static java.lang.Math.sin;
-import static java.lang.StrictMath.cos;
+import static java.lang.Math.cos;
 
 public class MecanumDriveTrain {
     HardwareMap map;
@@ -29,23 +29,17 @@ public class MecanumDriveTrain {
         frontRight = (DcMotorEx) map.dcMotor.get("frontRight");
     }
 
-    double gamepadX, gamepadY, gamepadTurn;
     double angle, speed, rotation;
     double sinDir, cosDir;
     double power[] = new double[4];
     double largest;
 
-    public void arcadeDrive(double gamepadX, double gamepadY, double gamepadTurn){//it drives (x and y values for x and y directions, gamepad turn for turning value
-        this.gamepadX = gamepadX; // drive program based on https://github.com/powerstackers/FTC-5029-Velocity-Vortex/wiki/Mecanum-Drive
-        this.gamepadY = gamepadY;
-        this.gamepadTurn = gamepadTurn;
-
-        rotation = gamepadTurn;
-        speed = Math.sqrt((gamepadY * gamepadY) + (gamepadX * gamepadX)); // use pythagorean theorem to find speed
-        angle = Math.atan2(-gamepadY, gamepadX);
+    public void setMovement(double speed, double angle, double rotation){//program based on https://github.com/powerstackers/FTC-5029-Velocity-Vortex/wiki/Mecanum-Drive
+        this.speed = speed;
+        this.angle = angle; //angle in radians
+        this.rotation = rotation;
 
         angle += PI / 4; // shifts angle by 45 deg because mecanum rollers are at 45
-        rotation *= 0.5; // scales down rotation to be more reasonable
 
         sinDir = sin(angle);
         cosDir = cos(angle);
@@ -72,6 +66,20 @@ public class MecanumDriveTrain {
         right.setPower(-power[3]);
         frontLeft.setPower(power[0]);
         frontRight.setPower(-power[1]);
+    }
+
+    double gamepadX, gamepadY, gamepadTurn;
+
+    public void arcadeDrive(double gamepadX, double gamepadY, double gamepadTurn){//it drives (x and y values for x and y directions, gamepad turn for turning value
+        this.gamepadX = gamepadX; // drive program based on https://github.com/powerstackers/FTC-5029-Velocity-Vortex/wiki/Mecanum-Drive
+        this.gamepadY = gamepadY;
+        this.gamepadTurn = gamepadTurn;
+
+        rotation = gamepadTurn * 0.5; //scales movement down to be slower
+        speed = Math.sqrt((gamepadY * gamepadY) + (gamepadX * gamepadX)); // use pythagorean theorem to find speed
+        angle = Math.atan2(-gamepadY, gamepadX);
+
+        setMovement(speed, angle, rotation);
 
     }
 
@@ -88,36 +96,10 @@ public class MecanumDriveTrain {
         angle = Math.atan2(-gamepadY, gamepadX);
         robotAngle = robotAngle * (PI / 180);
 
-        angle += PI / 4; // shifts angle by 45 deg because mecanum rollers are at 45
         rotation *= 0.5; // scales down rotation to be more reasonable
         angle -= robotAngle;
 
-        sinDir = sin(angle);
-        cosDir = cos(angle);
-
-        power[0] = (speed * sinDir) + rotation; //front left
-        power[1] = (speed * cosDir) + rotation; //front right
-        power[2] = (speed * -cosDir) + rotation; //back left
-        power[3] = (speed * -sinDir) + rotation; //back right
-
-        largest = abs(power[0]); //largest power
-        for (int i = 1; i < 4; i++) {
-            if (abs(power[i]) > largest)
-                largest = abs(power[i]); //finds largest value
-        }
-
-        // scales all powers so all powers are ≤ 1
-        if (largest > 1.0) {
-            for (int i = 0; i < 4; i++) {
-                power[i] = power[i] / largest;
-            }
-        }
-
-        left.setPower(power[2]);
-        right.setPower(-power[3]);
-        frontLeft.setPower(power[0]);
-        frontRight.setPower(-power[1]);
-
+        setMovement(speed, angle, rotation);
     }
 
 }
