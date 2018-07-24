@@ -19,7 +19,8 @@ public class DrawContours extends LinearOpMode {
         detector.enable();
 
         while(opModeIsActive()){
-
+            telemetry.addData("max contour area", detector.getMaxArea());
+            telemetry.update();
         }
 
         detector.disable();
