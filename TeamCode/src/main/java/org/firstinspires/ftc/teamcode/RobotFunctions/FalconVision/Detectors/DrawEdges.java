@@ -26,12 +26,13 @@ public class DrawEdges extends OpenCVpipeline {
     private Scalar lowFilterLow = new Scalar(0, 100, 80);
     private Scalar highFilterHigh = new Scalar(180, 255, 255);
     private Scalar highFilterLow = new Scalar(175, 100, 80);
-    MatOfPoint2f approxCurve = new MatOfPoint2f();
-    double rectArea;
+    private MatOfPoint2f approxCurve = new MatOfPoint2f();
+    private double rectArea;
+    private int rectId;
+    private double rectTesting;
 
 
     public Mat processFrame(Mat rgba, Mat gray){
-        this.rgba = rgba;
         Imgproc.cvtColor(rgba, hsv, Imgproc.COLOR_RGB2HSV, 3);
         Imgproc.blur(hsv, blurred, new Size(5, 5));
         Core.inRange(blurred, lowFilterLow, lowFilterHigh, filteredLow);
@@ -49,15 +50,26 @@ public class DrawEdges extends OpenCVpipeline {
             rect[i] = Imgproc.boundingRect(points);
         }
 
-        for (int i = 0; i < contours.size(); i++){
-
-            Imgproc.rectangle(rgba, rect[i].tl(), rect[i].br(), new Scalar(0, 255, 255), 5);
+        for(int i = 0; i < rect.length; i++){
+            if(rect[i].area() > rectArea){
+                rectArea = rect[i].area();
+                rectId = i;
+            }
         }
 
+        if (rectArea != 0) {// makes sure there actually are rectangles to draw
+            Imgproc.rectangle(rgba, rect[rectId].tl(), rect[rectId].br(), new Scalar(0, 0, 255), 5);
+        }
+
+        rectArea = 0;
         contours.clear();
+
+        for (int i = 0; i < rect.length; i++){
+            //Imgproc.rectangle(rgba, rect[i].tl(), rect[i].br(), new Scalar(0, 255, 255), 5);
+        }
 
         return rgba;
     }
 
-    public double getMaxArea(){return rectArea;}
+    public double getMaxArea(){return rectTesting;}
 }
