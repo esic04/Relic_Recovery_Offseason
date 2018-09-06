@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.RobotFunctions.subsystems;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import static java.lang.Math.PI;
@@ -9,6 +11,8 @@ import static java.lang.Math.cos;
 
 public class MecanumDriveTrain {
     HardwareMap map;
+    LinearOpMode LinOpMode; //opmodes passed to drivetrain class, allows this class to access the opmode's state
+    OpMode opmode;
     public DcMotorEx left, right, frontLeft, frontRight;
 
     public enum motor_mode {
@@ -21,7 +25,17 @@ public class MecanumDriveTrain {
 
 
 
-    public MecanumDriveTrain(HardwareMap map){ //drivetrain init function for hardware class
+    public MecanumDriveTrain(HardwareMap map, LinearOpMode LinOpMode){ //drivetrain init function for hardware class
+        this.LinOpMode = LinOpMode;
+        this.map = map;
+        left = (DcMotorEx) map.dcMotor.get("left");
+        right = (DcMotorEx) map.dcMotor.get("right");
+        frontLeft = (DcMotorEx) map.dcMotor.get("frontLeft");
+        frontRight = (DcMotorEx) map.dcMotor.get("frontRight");
+    }
+
+    public MecanumDriveTrain(HardwareMap map, OpMode opmode){
+        this.opmode = opmode;
         this.map = map;
         left = (DcMotorEx) map.dcMotor.get("left");
         right = (DcMotorEx) map.dcMotor.get("right");
