@@ -13,7 +13,7 @@ public class AngleTelemetry extends OpMode {
     TankHardware robot = new TankHardware();
 
     public void init(){
-        robot.init(hardwareMap);
+        robot.init(hardwareMap, this);
     }
 
     public void loop(){

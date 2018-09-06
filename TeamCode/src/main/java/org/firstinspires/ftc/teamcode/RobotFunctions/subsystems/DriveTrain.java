@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.RobotFunctions.subsystems;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -14,6 +16,8 @@ import org.firstinspires.ftc.teamcode.RobotFunctions.Calculators;
 public class DriveTrain {
     //public DcMotorEx left, right, frontLeft, frontRight;
     HardwareMap map;
+    LinearOpMode linOpmode;
+    OpMode opmode;
     Calculators cal = new Calculators();
 
     public DcMotorEx left, right, frontLeft, frontRight;
@@ -36,8 +40,18 @@ public class DriveTrain {
 
 
 
-    public DriveTrain(HardwareMap map){ //drivetrain init function for hardware class
+    public DriveTrain(HardwareMap map, LinearOpMode linOpmode){ //drivetrain init function for hardware class
         this.map = map;
+        this.linOpmode = linOpmode;
+        left = (DcMotorEx) map.dcMotor.get("left");
+        right = (DcMotorEx) map.dcMotor.get("right");
+        frontLeft = (DcMotorEx) map.dcMotor.get("frontLeft");
+        frontRight = (DcMotorEx) map.dcMotor.get("frontRight");
+    }
+
+    public DriveTrain(HardwareMap map, OpMode opmode){ //drivetrain init function for hardware class
+        this.map = map;
+        this.opmode = opmode;
         left = (DcMotorEx) map.dcMotor.get("left");
         right = (DcMotorEx) map.dcMotor.get("right");
         frontLeft = (DcMotorEx) map.dcMotor.get("frontLeft");

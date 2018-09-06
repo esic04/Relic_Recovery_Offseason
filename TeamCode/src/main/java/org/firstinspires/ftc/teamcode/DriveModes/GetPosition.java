@@ -17,7 +17,7 @@ public class GetPosition extends OpMode {
 
     @Override
     public void init(){
-        robot.init(hardwareMap);
+        robot.init(hardwareMap, this);
     }
 
     @Override

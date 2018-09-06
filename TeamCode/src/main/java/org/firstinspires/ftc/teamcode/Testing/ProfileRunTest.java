@@ -38,7 +38,7 @@ public class ProfileRunTest extends LinearOpMode {
 
     @Override
     public void runOpMode(){
-        robot.init(hardwareMap);
+        robot.init(hardwareMap, this);
 
         profile.setInputs(1, 1.6, 4);
 

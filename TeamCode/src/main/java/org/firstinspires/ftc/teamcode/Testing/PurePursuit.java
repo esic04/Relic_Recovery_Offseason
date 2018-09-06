@@ -42,7 +42,7 @@ public class PurePursuit extends LinearOpMode {
 
     @Override
     public void runOpMode(){
-        robot.init(hardwareMap);
+        robot.init(hardwareMap, this);
         pos.setPosition(robot.GetPose().getX(), robot.GetPose().getY());
         profile.setInputs(0.8, 1.2, tgt2, pos);
 

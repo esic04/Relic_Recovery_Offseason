@@ -10,7 +10,7 @@ public class FieldCentricMecanum extends OpMode {
     MecanumHardware robot = new MecanumHardware();
 
     public void init(){
-        robot.init(hardwareMap);
+        robot.init(hardwareMap, this);
     }
 
     public void loop(){

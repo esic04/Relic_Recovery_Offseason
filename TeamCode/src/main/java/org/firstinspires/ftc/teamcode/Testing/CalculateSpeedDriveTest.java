@@ -16,7 +16,7 @@ public class CalculateSpeedDriveTest extends OpMode {//does what the name says
     TankHardware robot = new TankHardware();
     @Override
     public void init(){
-        robot.init(hardwareMap);
+        robot.init(hardwareMap, this);
 
         data.addField("left speed");
         data.addField("right speed");

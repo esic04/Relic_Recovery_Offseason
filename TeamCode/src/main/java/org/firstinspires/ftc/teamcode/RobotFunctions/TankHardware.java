@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.RobotFunctions;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -13,18 +15,30 @@ import org.firstinspires.ftc.teamcode.RobotFunctions.subsystems.Sensors;
 public class TankHardware {
     public DriveTrain driveTrain;
     public Sensors sensors;
+    LinearOpMode LinOpmode;
+    OpMode opmode;
     HardwareMap hMap;
     Calculators calc = new Calculators();
     double distBetweenWheels = 16.25; //inches
 
-
-    public void init(HardwareMap map){
+    public void init(HardwareMap map, LinearOpMode LinOpMode){
+        this.LinOpmode = LinOpMode;
         hMap = map; //stores hardware map
-        driveTrain = new DriveTrain(hMap);
+        driveTrain = new DriveTrain(hMap, LinOpmode);
         driveTrain.left.setDirection(DcMotorSimple.Direction.REVERSE);
         driveTrain.frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         sensors = new Sensors(hMap);
     }
+
+    public void init(HardwareMap map, OpMode opmode){
+        this.opmode = opmode;
+        hMap = map; //stores hardware map
+        driveTrain = new DriveTrain(hMap, opmode);
+        driveTrain.left.setDirection(DcMotorSimple.Direction.REVERSE);
+        driveTrain.frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        sensors = new Sensors(hMap);
+    }
+
     Pose pos = new Pose(0, 0, 0);
     Point position = new Point(0, 0);
     double dist, leftDist, rightDist;

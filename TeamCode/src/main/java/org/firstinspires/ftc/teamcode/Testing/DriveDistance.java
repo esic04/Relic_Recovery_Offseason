@@ -11,7 +11,7 @@ public class DriveDistance extends OpMode {
 
     @Override
     public void init(){
-        robot.init(hardwareMap);
+        robot.init(hardwareMap, this);
     }
 
 

@@ -13,7 +13,7 @@ public class ArcadeDrive extends OpMode {
     TankHardware robot = new TankHardware();
     @Override
     public void init(){
-        robot.init(hardwareMap);
+        robot.init(hardwareMap, this);
 
     }
     @Override
