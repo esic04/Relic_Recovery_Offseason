@@ -30,19 +30,8 @@ public class MecanumDriveTrain {
         Left, Right, FrontLeft, FrontRight
     }
 
-
-
     public MecanumDriveTrain(HardwareMap map, LinearOpMode LinOpMode){ //drivetrain init function for hardware class
         this.LinOpMode = LinOpMode;
-        this.map = map;
-        left = (DcMotorEx) map.dcMotor.get("left");
-        right = (DcMotorEx) map.dcMotor.get("right");
-        frontLeft = (DcMotorEx) map.dcMotor.get("frontLeft");
-        frontRight = (DcMotorEx) map.dcMotor.get("frontRight");
-    }
-
-    public MecanumDriveTrain(HardwareMap map, OpMode opmode){
-        this.opmode = opmode;
         this.map = map;
         left = (DcMotorEx) map.dcMotor.get("left");
         right = (DcMotorEx) map.dcMotor.get("right");

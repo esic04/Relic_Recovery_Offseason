@@ -12,8 +12,8 @@ import org.firstinspires.ftc.teamcode.RobotFunctions.Calculators;
 
 /**
  * This class adds hardware and methods for a tank drivetrain
- * Two constructors are used, one for linear opmodes, one for iterative opmodes
- * Motors are declared as DcMotorEx because the DcMotorEx provids more useful functions
+ * The constructor needs a linear opmode, because any loops in this class are stopped when the opmode is stopped
+ * Motors are declared as DcMotorEx because the DcMotorEx provides more useful functions
  *
  * TODO: clean up and add methods, switch from mini pid to custom pid
  * @author ethan
@@ -24,7 +24,6 @@ public class DriveTrain {
     //public DcMotorEx left, right, frontLeft, frontRight;
     HardwareMap map;
     LinearOpMode linOpmode;
-    OpMode opmode;
     Calculators cal = new Calculators();
 
     public DcMotorEx left, right, frontLeft, frontRight;
@@ -45,20 +44,9 @@ public class DriveTrain {
         Left, Right, FrontLeft, FrontRight
     }
 
-
-
     public DriveTrain(HardwareMap map, LinearOpMode linOpmode){ //drivetrain init function for hardware class
         this.map = map;
         this.linOpmode = linOpmode;
-        left = (DcMotorEx) map.dcMotor.get("left");
-        right = (DcMotorEx) map.dcMotor.get("right");
-        frontLeft = (DcMotorEx) map.dcMotor.get("frontLeft");
-        frontRight = (DcMotorEx) map.dcMotor.get("frontRight");
-    }
-
-    public DriveTrain(HardwareMap map, OpMode opmode){ //drivetrain init function for hardware class
-        this.map = map;
-        this.opmode = opmode;
         left = (DcMotorEx) map.dcMotor.get("left");
         right = (DcMotorEx) map.dcMotor.get("right");
         frontLeft = (DcMotorEx) map.dcMotor.get("frontLeft");
