@@ -1,5 +1,15 @@
 package org.firstinspires.ftc.teamcode.RobotFunctions.MotionStuff;
 
+/**
+ * This class provides methods for a custom pid controller
+ * This controller has the capability to limit integral build up, and maximum integral output
+ * To disable a limit, set the limit to zero
+ * Based off mini pid library (https://github.com/tekdemo/MiniPID-Java)
+ *
+ * TODO: maybe add pidva functionality
+ * @author ethan
+ */
+
 public class PID {
     double Kp, Ki, Kd;
     double tgt, actual, lastActual;

@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.RobotFunctions;
 
 /**
- * Created by ethan on 3/23/18.
+ * This class contains methods for basic calculations such as converting encoder counts to distance in inches
  */
 
 public class Calculators {

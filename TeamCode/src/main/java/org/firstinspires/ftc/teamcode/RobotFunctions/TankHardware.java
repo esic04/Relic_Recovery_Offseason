@@ -5,11 +5,17 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.RobotFunctions.Calculators;
-import org.firstinspires.ftc.teamcode.RobotFunctions.Point;
-import org.firstinspires.ftc.teamcode.RobotFunctions.Pose;
 import org.firstinspires.ftc.teamcode.RobotFunctions.subsystems.DriveTrain;
 import org.firstinspires.ftc.teamcode.RobotFunctions.subsystems.Sensors;
+
+/**
+ * This class interfaces subsystems (currently drivetrain and sensors) in a class for a robot using tank drive
+ * To use: in opmode make a new tank hardware instance (TankHardware robot = new TankHardware();), then initiate it in the init period of the opmode.
+ * To access a specific subsystem: write the name of the hardware instance, then add .subsystem name after it
+ *
+ * @author ethan
+ * TODO: clean up this class and add commonly used variables to replace hard coded numbers
+ */
 
 
 public class TankHardware {

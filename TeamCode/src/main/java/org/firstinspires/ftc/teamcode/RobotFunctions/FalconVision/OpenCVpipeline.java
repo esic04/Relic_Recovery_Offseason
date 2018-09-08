@@ -7,6 +7,14 @@ import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.JavaCameraView;
 import org.opencv.core.Mat;
 
+/**
+ * This class provides a base class for interfacing opencv with opencv detectors
+ *
+ * @see github.com/guineawheek/endercv/blob/master/endercv/src/main/java/org/corningrobotics/enderbots/endercv/OpenCVPipeline.java for the original source of this code
+ *
+ * TODO: remove the stopped bool function, replace in detectors with checking opmode
+ */
+
 public abstract class OpenCVpipeline implements CameraBridgeViewBase.CvCameraViewListener2{
     static {
         System.loadLibrary("opencv_java3"); //idk what this does but without it the rc crashes

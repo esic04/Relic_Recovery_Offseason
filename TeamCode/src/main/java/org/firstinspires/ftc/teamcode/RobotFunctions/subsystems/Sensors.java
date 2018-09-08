@@ -9,6 +9,12 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
+/**
+ * This class contains the hardware and methods for the sensor subsystem
+ * Any angle reported in degrees will have a range of 0-360
+ * The imu is under i2c port 0 in the robot controller configuration
+ */
+
 public class Sensors {
     public BNO055IMU imu;
     HardwareMap map;

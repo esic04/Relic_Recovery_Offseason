@@ -5,6 +5,13 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 
+/**
+ * This class adds the capability to add a live feed of the camera from the robot controller, to the screen on the robot controller
+ * I'm not sure exactly how it works. Just don't touch anything and it'll be fine
+ *
+ * @author ethan
+ */
+
 public class CameraViewDisplay implements ViewDisplay {// adds camera image onto screen, idk how it works
     private static CameraViewDisplay instance;
 

@@ -1,5 +1,11 @@
 package org.firstinspires.ftc.teamcode.RobotFunctions;
 
+/**
+ * This class contains methods for a point
+ *
+ * @author ethan
+ */
+
 public class Point {
     double x, y;
 

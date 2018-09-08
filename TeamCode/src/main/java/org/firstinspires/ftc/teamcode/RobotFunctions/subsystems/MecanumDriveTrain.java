@@ -9,6 +9,13 @@ import static java.lang.Math.abs;
 import static java.lang.Math.sin;
 import static java.lang.Math.cos;
 
+/**
+ * This class contains the hardware and methods used in the mecanum drivetrain
+ * @see DriveTrain class for more information about drivetrain subsystems in general
+ *
+ * @author ethan
+ */
+
 public class MecanumDriveTrain {
     HardwareMap map;
     LinearOpMode LinOpMode; //opmodes passed to drivetrain class, allows this class to access the opmode's state

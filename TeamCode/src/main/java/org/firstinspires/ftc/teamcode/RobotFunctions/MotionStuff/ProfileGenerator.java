@@ -1,7 +1,10 @@
 package org.firstinspires.ftc.teamcode.RobotFunctions.MotionStuff;
 
 /**
- * Created by ethan on 3/23/18.
+ * This class adds methods for trapezoidal motion profiling in one dimension (only can move in a line)
+ *
+ * TODO: add comments explaining how specific things work
+ * @author ethan
  */
 //input time get current area getting position
 public class ProfileGenerator {

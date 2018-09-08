@@ -1,5 +1,11 @@
 package org.firstinspires.ftc.teamcode.RobotFunctions;
 
+/**
+ * This class contains methods for a pose (same as a point with the addition of heading)
+ *
+ * @author ethan
+ */
+
 public class Pose {
     double x, y, heading;
 

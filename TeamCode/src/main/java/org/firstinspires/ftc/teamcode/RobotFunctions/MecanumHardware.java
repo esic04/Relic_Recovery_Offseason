@@ -5,10 +5,16 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.RobotFunctions.Calculators;
-import org.firstinspires.ftc.teamcode.RobotFunctions.subsystems.DriveTrain;
 import org.firstinspires.ftc.teamcode.RobotFunctions.subsystems.MecanumDriveTrain;
 import org.firstinspires.ftc.teamcode.RobotFunctions.subsystems.Sensors;
+
+/**
+ * This class interfaces multiple subsystems (currently drivetrain and sensors) together in a single class for a robot using a mecanum drive
+ * There are two init methods, one for linear opmodes, and one for iterative opmodes
+ * To determine if the opmode is stopped, both opmodes have to be checked if they are stopped
+ *
+ * @author ethan
+ */
 
 public class MecanumHardware {
     public MecanumDriveTrain mecanumDrive;

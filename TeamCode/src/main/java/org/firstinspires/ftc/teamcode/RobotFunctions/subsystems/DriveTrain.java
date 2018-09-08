@@ -8,9 +8,16 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.stormbots.MiniPID;
 
-import org.firstinspires.ftc.teamcode.RobotFunctions.Point;
-import org.firstinspires.ftc.teamcode.RobotFunctions.Pose;
 import org.firstinspires.ftc.teamcode.RobotFunctions.Calculators;
+
+/**
+ * This class adds hardware and methods for a tank drivetrain
+ * Two constructors are used, one for linear opmodes, one for iterative opmodes
+ * Motors are declared as DcMotorEx because the DcMotorEx provids more useful functions
+ *
+ * TODO: clean up and add methods, switch from mini pid to custom pid
+ * @author ethan
+ */
 
 
 public class DriveTrain {

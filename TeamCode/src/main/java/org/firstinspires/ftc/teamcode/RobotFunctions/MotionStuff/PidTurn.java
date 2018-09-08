@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.stormbots.MiniPID;
 
 /**
- * Created by ethan on 3/16/18.
+ * TODO: Delete and implement into drivetrain class
  */
 
 public class PidTurn {

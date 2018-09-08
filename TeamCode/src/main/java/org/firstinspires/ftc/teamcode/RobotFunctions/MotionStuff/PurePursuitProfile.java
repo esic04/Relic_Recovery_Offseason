@@ -3,6 +3,14 @@ package org.firstinspires.ftc.teamcode.RobotFunctions.MotionStuff;
 import org.firstinspires.ftc.teamcode.RobotFunctions.Calculators;
 import org.firstinspires.ftc.teamcode.RobotFunctions.Point;
 
+/**
+ * This class has methods for a one dimensional motion profile
+ * This is different than my other profile generator, because the calculations are happening real time, and the input is based off distance to a target
+ *
+ * TODO: clean up, and add comments explaining how specific things work
+ * @author ethan
+ */
+
 public class PurePursuitProfile {
     double accel, speed;
     Point tgt, stPos;
