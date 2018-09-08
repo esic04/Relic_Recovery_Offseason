@@ -5,15 +5,21 @@ import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.MatOfPoint2f;
-import org.opencv.core.Point;
 import org.opencv.core.Rect;
-import org.opencv.core.RotatedRect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
 import java.util.ArrayList;
 import java.util.List;
+
+/**
+ * This class is a detector for open cv that is supposed to detect all the orange squares in an image, then draw them
+ * This class currently either crashes the robot controller, or doesn't detect the squares well
+ * This class probably won't be used, so I won't fix it
+ *
+ * @author ethan
+ */
 
 public class DrawEdges extends OpenCVpipeline {
 
