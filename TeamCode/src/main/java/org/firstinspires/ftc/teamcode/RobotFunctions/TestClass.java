@@ -9,16 +9,14 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
  */
 
 public class TestClass {
-    LinearOpMode opmode;
+    LinearOpMode linOpMode;
 
-    public TestClass(LinearOpMode opmode){
-        this.opmode = opmode;
-    }
+    public TestClass(LinearOpMode linOpMode){this.linOpMode = linOpMode;}
 
     public void test(){
-        while(opmode.opModeIsActive()){
-            opmode.telemetry.addData("testing", "hopefuly works");
-            opmode.telemetry.update();
+        while(linOpMode.opModeIsActive()){
+            linOpMode.telemetry.addData("testing", "hopefuly works");
+            linOpMode.telemetry.update();
         }
     }
 
