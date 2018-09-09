@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.RobotFunctions.subsystems;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -41,10 +40,19 @@ public class DriveTrain {
     }
 
     public enum motor {
-        Left, Right, FrontLeft, FrontRight
+        left, right, frontLeft, frontRight
     }
 
     public DriveTrain(HardwareMap map, LinearOpMode linOpmode){ //drivetrain init function for hardware class
+        this.map = map;
+        this.linOpmode = linOpmode;
+        left = (DcMotorEx) map.dcMotor.get("left");
+        right = (DcMotorEx) map.dcMotor.get("right");
+        frontLeft = (DcMotorEx) map.dcMotor.get("frontLeft");
+        frontRight = (DcMotorEx) map.dcMotor.get("frontRight");
+    }
+
+    public DriveTrain(HardwareMap map){ //drivetrain init function for hardware class
         this.map = map;
         this.linOpmode = linOpmode;
         left = (DcMotorEx) map.dcMotor.get("left");
@@ -128,10 +136,10 @@ public class DriveTrain {
         pid1.setDirection(true);
         pid2.setDirection(true);
 
-        leftOut = pid1.getOutput(leftSpeed(), output) + leftOut; // for velocity pid, adds pid out to previous output for better control
-        rightOut = pid3.getOutput(rightSpeed(), output) + rightOut;
-        frontLeftOut = pid2.getOutput(frontLeftSpeed(), output) + frontLeftOut;
-        frontRightOut = pid4.getOutput(frontRightSpeed(), output) + frontRightOut;
+        leftOut = pid1.getOutput(speed(motor.left), output) + leftOut; // for velocity pid, adds pid out to previous output for better control
+        rightOut = pid3.getOutput(speed(motor.right), output) + rightOut;
+        frontLeftOut = pid2.getOutput(speed(motor.frontLeft), output) + frontLeftOut;
+        frontRightOut = pid4.getOutput(speed(motor.frontRight), output) + frontRightOut;
 
         left.setPower(leftOut);
         right.setPower(rightOut);
@@ -162,67 +170,54 @@ public class DriveTrain {
         br.setDirection(true);
         fr.setDirection(true);
 
-        leftPow = bl.getOutput(leftSpeed(), leftTgt) + leftPow; //for velocity pid, adds pid out to previous output for better control
-        rightPow = br.getOutput(rightSpeed(), rightTgt) + rightPow;
-        frontLeftPow = fl.getOutput(frontLeftSpeed(), leftTgt) + frontLeftPow;
-        frontRightPow = fr.getOutput(frontRightSpeed(), rightTgt) + frontRightPow;
+        leftPow = bl.getOutput(speed(motor.left), leftTgt) + leftPow; //for velocity pid, adds pid out to previous output for better control
+        rightPow = br.getOutput(speed(motor.right), rightTgt) + rightPow;
+        frontLeftPow = fl.getOutput(speed(motor.frontLeft), leftTgt) + frontLeftPow;
+        frontRightPow = fr.getOutput(speed(motor.frontRight), rightTgt) + frontRightPow;
 
         left.setPower(leftPow);
         right.setPower(rightPow);
         frontLeft.setPower(frontLeftPow);
         frontRight.setPower(frontRightPow);
-
     }
 
-    double leftSpeed, leftPreviousTime, leftCurrentTime, leftPos, leftPreviousDist, leftDist;
+    double prevTime, time, deltaTime;
+    double leftPos, leftPreviousDist, leftDist;
+    double rightPos, rightPreviousDist, rightDist;
+    double frontLeftPos, frontLeftPreviousDist, frontLeftDist;
+    double frontRightPos, frontRightPreviousDist, frontRightDist;
+    double speed;
+    public double speed(motor motor){//calculates linear speed of each wheel (ft/sec)
+        time = System.currentTimeMillis() / 1000.0; //decimal needed because of int/int
+        deltaTime = time - prevTime;
+        if(motor == DriveTrain.motor.left){
+            leftPos = left.getCurrentPosition();
+            leftDist = cal.Encoder2Ft(leftPos);
+            speed = -(leftDist - leftPreviousDist) / (deltaTime);
+            leftPreviousDist = leftDist;
+        } else if(motor == DriveTrain.motor.right){
+            rightPos = right.getCurrentPosition();
+            rightDist = cal.Encoder2Ft(rightPos);
+            speed = -(rightDist - rightPreviousDist) / (deltaTime);
+            rightPreviousDist = rightDist;
+        } else if(motor == DriveTrain.motor.frontLeft){
+            frontLeftPos = frontLeft.getCurrentPosition();
+            frontLeftDist = cal.Encoder2Ft(frontLeftPos);
+            speed = -(frontLeftDist - frontLeftPreviousDist) / (deltaTime);
+            frontLeftPreviousDist = frontLeftDist;
+        } else if(motor == DriveTrain.motor.frontRight){
+            frontRightPos = frontRight.getCurrentPosition();
+            frontRightDist = cal.Encoder2Ft(frontRightPos);
+            speed = -(frontRightDist - frontRightPreviousDist) / (deltaTime);
+            frontRightPreviousDist = frontRightDist;
+        }
+        prevTime = time;
 
-    public double leftSpeed(){//calculates speed based off a single encoder count
-        leftPos = left.getCurrentPosition();
-        leftDist = cal.Encoder2Ft(leftPos);
-        leftCurrentTime = System.currentTimeMillis() / 1000.0; //converts millisec to sec, decimal needed because of int/int
-        leftSpeed = -(leftDist - leftPreviousDist) / (leftCurrentTime - leftPreviousTime);
-        leftPreviousTime = leftCurrentTime;
-        leftPreviousDist = leftDist;
-        return -leftSpeed;
-
+        return speed;
     }
 
-    double rightSpeed, rightPreviousTime, rightCurrentTime, rightPos, rightPreviousDist, rightDist;
 
-    public double rightSpeed(){
-        rightPos = right.getCurrentPosition();
-        rightDist = cal.Encoder2Ft(rightPos);
-        rightCurrentTime = System.currentTimeMillis() / 1000.0;
-        rightSpeed = -(rightDist - rightPreviousDist) / (rightCurrentTime - rightPreviousTime);
-        rightPreviousTime = rightCurrentTime;
-        rightPreviousDist = rightDist;
-        return -rightSpeed;
-    }
 
-    double frontLeftSpeed, frontLeftPreviousTime, frontLeftCurrentTime, frontLeftPos, frontLeftPreviousDist, frontLeftDist;
-
-    public double frontLeftSpeed(){
-        frontLeftPos = frontLeft.getCurrentPosition();
-        frontLeftDist = cal.Encoder2Ft(frontLeftPos);
-        frontLeftCurrentTime = System.currentTimeMillis() / 1000.0;
-        frontLeftSpeed = -(frontLeftDist - frontLeftPreviousDist) / (frontLeftCurrentTime - frontLeftPreviousTime);
-        frontLeftPreviousTime = frontLeftCurrentTime;
-        frontLeftPreviousDist = frontLeftDist;
-        return -frontLeftSpeed;
-
-    }
-
-    double frontRightSpeed, frontRightPreviousTime, frontRightCurrentTime, frontRightPos, frontRightPreviousDist, frontRightDist;
-
-    public double frontRightSpeed(){
-        frontRightPos = frontRight.getCurrentPosition();
-        frontRightDist = cal.Encoder2Ft(frontRightPos);
-        frontRightCurrentTime = System.currentTimeMillis() / 1000.0;
-        frontRightSpeed = -(frontRightDist - frontRightPreviousDist) / (frontRightCurrentTime - frontRightPreviousTime);
-        frontRightPreviousTime = frontRightCurrentTime;
-        frontRightPreviousDist = frontRightDist;
-        return -frontRightSpeed;
-    }
 
 
 

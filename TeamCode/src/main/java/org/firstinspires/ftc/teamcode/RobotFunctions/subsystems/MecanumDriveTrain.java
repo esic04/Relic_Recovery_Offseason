@@ -39,6 +39,14 @@ public class MecanumDriveTrain {
         frontRight = (DcMotorEx) map.dcMotor.get("frontRight");
     }
 
+    public MecanumDriveTrain(HardwareMap map){
+        this.map = map;
+        left = (DcMotorEx) map.dcMotor.get("left");
+        right = (DcMotorEx) map.dcMotor.get("right");
+        frontLeft = (DcMotorEx) map.dcMotor.get("frontLeft");
+        frontRight = (DcMotorEx) map.dcMotor.get("frontRight");
+    }
+
     double angle, speed, rotation;
     double sinDir, cosDir;
     double power[] = new double[4];

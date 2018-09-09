@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.RobotFunctions.subsystems.Sensors;
 
 /**
  * This class interfaces multiple subsystems (currently drivetrain and sensors) together in a single class for a robot using a mecanum drive
- * The init function needs to be passed a linear opmode, because the opmode may be checked if it is stopped, then any active loops are stopped
+ * @see TankHardware for more details about the hardware type of class
  *
  * @author ethan
  */
@@ -25,6 +25,14 @@ public class MecanumHardware {
         this.LinOpMode = LinOpMode;
         hMap = map; //stores hardware map
         mecanumDrive = new MecanumDriveTrain(hMap, LinOpMode);
+        mecanumDrive.left.setDirection(DcMotorSimple.Direction.REVERSE);
+        mecanumDrive.frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        sensors = new Sensors(hMap);
+    }
+
+    public void init(HardwareMap map){
+        hMap = map; //stores hardware map
+        mecanumDrive = new MecanumDriveTrain(hMap);
         mecanumDrive.left.setDirection(DcMotorSimple.Direction.REVERSE);
         mecanumDrive.frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         sensors = new Sensors(hMap);

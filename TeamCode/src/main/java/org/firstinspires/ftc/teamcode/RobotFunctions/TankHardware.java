@@ -10,8 +10,10 @@ import org.firstinspires.ftc.teamcode.RobotFunctions.subsystems.Sensors;
 
 /**
  * This class interfaces subsystems (currently drivetrain and sensors) in a class for a robot using tank drive
+ * The init function needs to be passed a linear opmode, because the opmode may be checked if it is stopped, then any active loops are stopped
  * To use: in linOpMode make a new tank hardware instance (TankHardware robot = new TankHardware();), then initiate it in the init period of the linOpMode.
  * To access a specific subsystem: write the name of the hardware instance, then add .subsystem name after it
+ * Note: if you need to use functions that check the opmode, you need to be using a linear opmode add while(opModeIsActive()) to opmode to make it an iterative opmode
  *
  * @author ethan
  * TODO: clean up this class and add commonly used variables to replace hard coded numbers
@@ -36,10 +38,9 @@ public class TankHardware {
         sensors = new Sensors(hMap);
     }
 
-    public void init(HardwareMap map, OpMode opmode){
-        this.opmode = opmode;
+    public void init(HardwareMap map){
         hMap = map; //stores hardware map
-        driveTrain = new DriveTrain(hMap, opmode);
+        driveTrain = new DriveTrain(hMap);
         driveTrain.left.setDirection(DcMotorSimple.Direction.REVERSE);
         driveTrain.frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         sensors = new Sensors(hMap);
