@@ -20,8 +20,8 @@ public class ArcadeDrive extends OpMode {
     public void loop(){
         robot.driveTrain.arcadeDrive(gamepad1.left_stick_x, gamepad1.left_stick_y);
 
-        telemetry.addData("left pow", robot.driveTrain.left.getPower());
-        telemetry.addData("right pow", robot.driveTrain.right.getPower());
+        telemetry.addData("bl pow", robot.driveTrain.bl.getPower());
+        telemetry.addData("br pow", robot.driveTrain.br.getPower());
         telemetry.addData("heading", robot.sensors.getHeading());
 
     }

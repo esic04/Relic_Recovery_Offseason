@@ -27,10 +27,10 @@ public class encoder extends OpMode {
     Calculators convert = new Calculators();
     @Override
     public void init(){
-        left = hardwareMap.get(DcMotor.class, "left");
-        right = hardwareMap.get(DcMotor.class, "right");
-        frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
-        frontRight = hardwareMap.get(DcMotor.class, "frontRight");
+        left = hardwareMap.get(DcMotor.class, "bl");
+        right = hardwareMap.get(DcMotor.class, "br");
+        frontLeft = hardwareMap.get(DcMotor.class, "fl");
+        frontRight = hardwareMap.get(DcMotor.class, "fr");
 
         left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -45,8 +45,8 @@ public class encoder extends OpMode {
         frontRight.setPower(-0.4);
         frontLeft.setPower(0.4);
 
-        telemetry.addData("left Pos", left.getCurrentPosition());
-        telemetry.addData("right pos", right.getCurrentPosition());
+        telemetry.addData("bl Pos", left.getCurrentPosition());
+        telemetry.addData("br pos", right.getCurrentPosition());
 
         encoderLeftDist = (left.getCurrentPosition() + frontLeft.getCurrentPosition()) / 2;
         encoderRightDist = (right.getCurrentPosition() + frontRight.getCurrentPosition()) / 2;
@@ -54,7 +54,7 @@ public class encoder extends OpMode {
         leftDist = convert.Encoder2Inches(encoderLeftDist);
         rightDist = convert.Encoder2Inches(encoderRightDist);
 
-        telemetry.addData("left distance", "% ft", leftDist );
-        telemetry.addData("right distance", "% ft", rightDist );
+        telemetry.addData("bl distance", "% ft", leftDist );
+        telemetry.addData("br distance", "% ft", rightDist );
     }
 }

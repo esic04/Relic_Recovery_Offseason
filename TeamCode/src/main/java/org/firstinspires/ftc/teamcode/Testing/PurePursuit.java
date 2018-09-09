@@ -131,10 +131,10 @@ public class PurePursuit extends LinearOpMode {
             leftAngularSpeed = (output * 12 - hdgPIDout) / wheelr / gearRatio;
             rightAngularSpeed = (output * 12 + hdgPIDout) / wheelr / gearRatio;
 
-            robot.driveTrain.left.setVelocity(leftAngularSpeed, AngleUnit.RADIANS);
-            robot.driveTrain.right.setVelocity(rightAngularSpeed, AngleUnit.RADIANS);
-            robot.driveTrain.frontLeft.setVelocity(leftAngularSpeed, AngleUnit.RADIANS);
-            robot.driveTrain.frontRight.setVelocity(rightAngularSpeed, AngleUnit.RADIANS);
+            robot.driveTrain.bl.setVelocity(leftAngularSpeed, AngleUnit.RADIANS);
+            robot.driveTrain.br.setVelocity(rightAngularSpeed, AngleUnit.RADIANS);
+            robot.driveTrain.fl.setVelocity(leftAngularSpeed, AngleUnit.RADIANS);
+            robot.driveTrain.fr.setVelocity(rightAngularSpeed, AngleUnit.RADIANS);
 
             telemetry.addData("output", output);
             telemetry.addData("line angle", lineAngle);

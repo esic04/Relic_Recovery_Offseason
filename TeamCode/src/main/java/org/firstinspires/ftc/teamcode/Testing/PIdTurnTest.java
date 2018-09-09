@@ -36,10 +36,10 @@ public class PIdTurnTest extends LinearOpMode {
 
     @Override
     public void runOpMode(){
-        left = hardwareMap.get(DcMotor.class, "left"); //old init should be replaced
-        right = hardwareMap.get(DcMotor.class, "right");
-        frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
-        frontRight = hardwareMap.get(DcMotor.class, "frontRight");
+        left = hardwareMap.get(DcMotor.class, "bl"); //old init should be replaced
+        right = hardwareMap.get(DcMotor.class, "br");
+        frontLeft = hardwareMap.get(DcMotor.class, "fl");
+        frontRight = hardwareMap.get(DcMotor.class, "fr");
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;

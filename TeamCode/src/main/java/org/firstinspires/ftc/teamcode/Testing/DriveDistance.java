@@ -18,7 +18,7 @@ public class DriveDistance extends OpMode {
     public void loop(){
         robot.driveTrain.arcadeDrive(gamepad1.left_stick_x, gamepad1.left_stick_y);
 
-        telemetry.addData("left dist", cal.Encoder2Ft(robot.driveTrain.left.getCurrentPosition()));
-        telemetry.addData("right dist", cal.Encoder2Ft(robot.driveTrain.right.getCurrentPosition()));
+        telemetry.addData("bl dist", cal.Encoder2Ft(robot.driveTrain.bl.getCurrentPosition()));
+        telemetry.addData("br dist", cal.Encoder2Ft(robot.driveTrain.br.getCurrentPosition()));
     }
 }

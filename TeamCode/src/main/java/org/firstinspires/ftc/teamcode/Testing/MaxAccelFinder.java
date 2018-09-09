@@ -22,17 +22,17 @@ public class MaxAccelFinder extends LinearOpMode {
     DataLogger data = new DataLogger("accel data");
 
     public void runOpMode(){
-        left = hardwareMap.get(DcMotor.class, "left");
-        right = hardwareMap.get(DcMotor.class, "right");
-        frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
-        frontRight = hardwareMap.get(DcMotor.class, "frontRight");
+        left = hardwareMap.get(DcMotor.class, "bl");
+        right = hardwareMap.get(DcMotor.class, "br");
+        frontLeft = hardwareMap.get(DcMotor.class, "fl");
+        frontRight = hardwareMap.get(DcMotor.class, "fr");
 
         right.setDirection(DcMotorSimple.Direction.REVERSE);
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
         data.addField("time");
-        data.addField("left distance");
-        data.addField("right distance");
+        data.addField("bl distance");
+        data.addField("br distance");
         data.newLine();
 
         waitForStart();

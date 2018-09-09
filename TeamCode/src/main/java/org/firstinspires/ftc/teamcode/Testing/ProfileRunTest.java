@@ -33,7 +33,7 @@ public class ProfileRunTest extends LinearOpMode {
     PID pid1 = new PID(Kp, Ki, Kd, 0.4, -1, 1);
     PID pid2 = new PID(Kp, Ki, Kd, 0.4, -1, 1);
     PID pid3 = new PID(Kp, Ki, Kd, 0.4, -1, 1);
-    PID pid4 = new PID(Kp, Ki, Kd, 0.4, -1, 1); //1= back left, 2 = front left, 3 = back right, 4 = front right
+    PID pid4 = new PID(Kp, Ki, Kd, 0.4, -1, 1); //1= back bl, 2 = front bl, 3 = back br, 4 = front br
     PID headingPID = new PID(headingP, headingI, headingD, 0.2, -0.6, 0.6);
 
     @Override
@@ -63,36 +63,36 @@ public class ProfileRunTest extends LinearOpMode {
 
             /* headingOut = headingPID.getOutput(heading, 90);
 
-            leftOut = pid1.getOutput(robot.driveTrain.speed(DriveTrain.motor.left), output) + leftOut - headingOut;  //for velocity pid, adds pid out to previous output for better control
-            rightOut = pid3.getOutput(robot.driveTrain.speed(DriveTrain.motor.right), output) + rightOut + headingOut;
-            frontLeftOut = pid2.getOutput(robot.driveTrain.speed(DriveTrain.motor.frontLeft), output) + frontLeftOut - headingOut;
-            frontRightOut = pid4.getOutput(robot.driveTrain.speed(DriveTrain.motor.frontRight), output) + frontRightOut + headingOut;
+            leftOut = pid1.getOutput(robot.driveTrain.speed(DriveTrain.motor.bl), output) + leftOut - headingOut;  //for velocity pid, adds pid out to previous output for better control
+            rightOut = pid3.getOutput(robot.driveTrain.speed(DriveTrain.motor.br), output) + rightOut + headingOut;
+            frontLeftOut = pid2.getOutput(robot.driveTrain.speed(DriveTrain.motor.fl), output) + frontLeftOut - headingOut;
+            frontRightOut = pid4.getOutput(robot.driveTrain.speed(DriveTrain.motor.fr), output) + frontRightOut + headingOut;
 
-            robot.driveTrain.left.setPower(leftOut);
-            robot.driveTrain.right.setPower(rightOut);
-            robot.driveTrain.frontLeft.setPower(frontLeftOut);
-            robot.driveTrain.frontRight.setPower(frontRightOut);
+            robot.driveTrain.bl.setPower(leftOut);
+            robot.driveTrain.br.setPower(rightOut);
+            robot.driveTrain.fl.setPower(frontLeftOut);
+            robot.driveTrain.fr.setPower(frontRightOut);
 
             */
 
             data.addField(time);
-            data.addField(((robot.driveTrain.speed(DriveTrain.motor.left) + robot.driveTrain.speed(DriveTrain.motor.right) + robot.driveTrain.speed(DriveTrain.motor.frontLeft) + robot.driveTrain.speed(DriveTrain.motor.frontRight)) / 4) * 12);
+            data.addField(((robot.driveTrain.speed(DriveTrain.motor.bl) + robot.driveTrain.speed(DriveTrain.motor.br) + robot.driveTrain.speed(DriveTrain.motor.fl) + robot.driveTrain.speed(DriveTrain.motor.fr)) / 4) * 12);
             data.addField(output);
             data.newLine();
 
 
             angularSpeed = output / wheelr / gearRatio;
 
-            robot.driveTrain.left.setVelocity(angularSpeed, AngleUnit.RADIANS);
-            robot.driveTrain.right.setVelocity(angularSpeed, AngleUnit.RADIANS);
-            robot.driveTrain.frontLeft.setVelocity(angularSpeed, AngleUnit.RADIANS);
-            robot.driveTrain.frontRight.setVelocity(angularSpeed, AngleUnit.RADIANS);
+            robot.driveTrain.bl.setVelocity(angularSpeed, AngleUnit.RADIANS);
+            robot.driveTrain.br.setVelocity(angularSpeed, AngleUnit.RADIANS);
+            robot.driveTrain.fl.setVelocity(angularSpeed, AngleUnit.RADIANS);
+            robot.driveTrain.fr.setVelocity(angularSpeed, AngleUnit.RADIANS);
 
             telemetry.addData("profile output", output);
-            telemetry.addData("left actual speed", robot.driveTrain.speed(DriveTrain.motor.left) * 12);
-            telemetry.addData("right actual speed", robot.driveTrain.speed(DriveTrain.motor.right) * 12);
+            telemetry.addData("bl actual speed", robot.driveTrain.speed(DriveTrain.motor.bl) * 12);
+            telemetry.addData("br actual speed", robot.driveTrain.speed(DriveTrain.motor.br) * 12);
             telemetry.addData("heading", heading);
-            telemetry.addData("left pow", robot.driveTrain.left.getPower());
+            telemetry.addData("bl pow", robot.driveTrain.bl.getPower());
             telemetry.update();
 
         }

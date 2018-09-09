@@ -33,16 +33,16 @@ public class TankHardware {
         this.LinOpmode = LinOpMode;
         hMap = map; //stores hardware map
         driveTrain = new DriveTrain(hMap, LinOpmode);
-        driveTrain.left.setDirection(DcMotorSimple.Direction.REVERSE);
-        driveTrain.frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        driveTrain.bl.setDirection(DcMotorSimple.Direction.REVERSE);
+        driveTrain.fl.setDirection(DcMotorSimple.Direction.REVERSE);
         sensors = new Sensors(hMap);
     }
 
     public void init(HardwareMap map){
         hMap = map; //stores hardware map
         driveTrain = new DriveTrain(hMap);
-        driveTrain.left.setDirection(DcMotorSimple.Direction.REVERSE);
-        driveTrain.frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        driveTrain.bl.setDirection(DcMotorSimple.Direction.REVERSE);
+        driveTrain.fl.setDirection(DcMotorSimple.Direction.REVERSE);
         sensors = new Sensors(hMap);
     }
 
@@ -55,7 +55,7 @@ public class TankHardware {
     double x, y, prevX, prevY;
     double heading, prevHeading;
     private Pose CalcPose(){
-        cl = driveTrain.left.getCurrentPosition(); cr = driveTrain.right.getCurrentPosition(); cfl = driveTrain.frontLeft.getCurrentPosition(); cfr = driveTrain.frontRight.getCurrentPosition();
+        cl = driveTrain.bl.getCurrentPosition(); cr = driveTrain.br.getCurrentPosition(); cfl = driveTrain.fl.getCurrentPosition(); cfr = driveTrain.fr.getCurrentPosition();
         dl = cl - pl; dr = cr - pr; dfl = cfl - pfl; dfr = cfr - pfr;
 
         dist = calc.Encoder2Ft((dl + dr + dfl + dfr) / 4);

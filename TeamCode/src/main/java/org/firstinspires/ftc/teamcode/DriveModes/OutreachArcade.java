@@ -14,15 +14,15 @@ public class OutreachArcade extends OpMode {
     public void init(){
         robot.init(hardwareMap);
 
-        robot.driveTrain.right.setDirection(DcMotorSimple.Direction.REVERSE);
-        robot.driveTrain.frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        robot.driveTrain.br.setDirection(DcMotorSimple.Direction.REVERSE);
+        robot.driveTrain.fr.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     @Override
     public void loop(){
-        robot.driveTrain.left.setPower(-gamepad1.left_stick_y - (0.75 * gamepad1.left_stick_x));
-        robot.driveTrain.right.setPower(-gamepad1.left_stick_y + (0.75 * gamepad1.left_stick_x));
-        robot.driveTrain.frontLeft.setPower(-gamepad1.left_stick_y - (0.75 * gamepad1.left_stick_x));
-        robot.driveTrain.frontRight.setPower(-gamepad1.left_stick_y + (0.75 * gamepad1.left_stick_x));
+        robot.driveTrain.bl.setPower(-gamepad1.left_stick_y - (0.75 * gamepad1.left_stick_x));
+        robot.driveTrain.br.setPower(-gamepad1.left_stick_y + (0.75 * gamepad1.left_stick_x));
+        robot.driveTrain.fl.setPower(-gamepad1.left_stick_y - (0.75 * gamepad1.left_stick_x));
+        robot.driveTrain.fr.setPower(-gamepad1.left_stick_y + (0.75 * gamepad1.left_stick_x));
     }
 }

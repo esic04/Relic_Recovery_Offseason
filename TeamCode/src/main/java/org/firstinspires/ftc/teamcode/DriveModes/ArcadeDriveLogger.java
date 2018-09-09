@@ -28,17 +28,17 @@ public class ArcadeDriveLogger extends OpMode {
 
     @Override
     public void init(){
-        left = hardwareMap.get(DcMotor.class, "left");
-        right = hardwareMap.get(DcMotor.class, "right");
-        frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
-        frontRight = hardwareMap.get(DcMotor.class, "frontRight");
+        left = hardwareMap.get(DcMotor.class, "bl");
+        right = hardwareMap.get(DcMotor.class, "br");
+        frontLeft = hardwareMap.get(DcMotor.class, "fl");
+        frontRight = hardwareMap.get(DcMotor.class, "fr");
 
         right.setDirection(DcMotorSimple.Direction.REVERSE);
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
         data.addField("time");
-        data.addField("left position");
-        data.addField("right position");
+        data.addField("bl position");
+        data.addField("br position");
         data.newLine();
 
 
@@ -51,8 +51,8 @@ public class ArcadeDriveLogger extends OpMode {
         frontLeft.setPower(gamepad1.left_stick_y - gamepad1.left_stick_x);
         frontRight.setPower(gamepad1.left_stick_y + gamepad1.left_stick_x);
 
-        telemetry.addData("left motor pow", left.getPower());
-        telemetry.addData("right motor pow", right.getPower());
+        telemetry.addData("bl motor pow", left.getPower());
+        telemetry.addData("br motor pow", right.getPower());
 
         averageLeft = (left.getCurrentPosition() + frontLeft.getCurrentPosition()) / 2;
         averageRight = (right.getCurrentPosition() + frontRight.getCurrentPosition()) / 2;

@@ -17,10 +17,10 @@ public class RampDrive extends OpMode {
     float tgt;
     @Override
     public void init(){
-        left = hardwareMap.get(DcMotor.class, "left");
-        right = hardwareMap.get(DcMotor.class, "right");
-        frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
-        frontRight = hardwareMap.get(DcMotor.class, "frontRight");
+        left = hardwareMap.get(DcMotor.class, "bl");
+        right = hardwareMap.get(DcMotor.class, "br");
+        frontLeft = hardwareMap.get(DcMotor.class, "fl");
+        frontRight = hardwareMap.get(DcMotor.class, "fr");
 
 
         right.setDirection(DcMotorSimple.Direction.REVERSE);

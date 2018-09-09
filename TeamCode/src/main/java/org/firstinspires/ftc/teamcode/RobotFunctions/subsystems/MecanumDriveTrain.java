@@ -33,18 +33,18 @@ public class MecanumDriveTrain {
     public MecanumDriveTrain(HardwareMap map, LinearOpMode LinOpMode){ //drivetrain init function for hardware class
         this.LinOpMode = LinOpMode;
         this.map = map;
-        left = (DcMotorEx) map.dcMotor.get("left");
-        right = (DcMotorEx) map.dcMotor.get("right");
-        frontLeft = (DcMotorEx) map.dcMotor.get("frontLeft");
-        frontRight = (DcMotorEx) map.dcMotor.get("frontRight");
+        left = (DcMotorEx) map.dcMotor.get("bl");
+        right = (DcMotorEx) map.dcMotor.get("br");
+        frontLeft = (DcMotorEx) map.dcMotor.get("fl");
+        frontRight = (DcMotorEx) map.dcMotor.get("fr");
     }
 
     public MecanumDriveTrain(HardwareMap map){
         this.map = map;
-        left = (DcMotorEx) map.dcMotor.get("left");
-        right = (DcMotorEx) map.dcMotor.get("right");
-        frontLeft = (DcMotorEx) map.dcMotor.get("frontLeft");
-        frontRight = (DcMotorEx) map.dcMotor.get("frontRight");
+        left = (DcMotorEx) map.dcMotor.get("bl");
+        right = (DcMotorEx) map.dcMotor.get("br");
+        frontLeft = (DcMotorEx) map.dcMotor.get("fl");
+        frontRight = (DcMotorEx) map.dcMotor.get("fr");
     }
 
     double angle, speed, rotation;
@@ -62,10 +62,10 @@ public class MecanumDriveTrain {
         sinDir = sin(angle);
         cosDir = cos(angle);
 
-        power[0] = (speed * sinDir) + rotation; //front left
-        power[1] = (speed * cosDir) + rotation; //front right
-        power[2] = (speed * -cosDir) + rotation; //back left
-        power[3] = (speed * -sinDir) + rotation; //back right
+        power[0] = (speed * sinDir) + rotation; //front bl
+        power[1] = (speed * cosDir) + rotation; //front br
+        power[2] = (speed * -cosDir) + rotation; //back bl
+        power[3] = (speed * -sinDir) + rotation; //back br
 
         largest = abs(power[0]); //largest power
         for (int i = 1; i < 4; i++) {

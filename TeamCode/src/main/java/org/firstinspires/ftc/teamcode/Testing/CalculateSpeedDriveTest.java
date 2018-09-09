@@ -19,8 +19,8 @@ public class CalculateSpeedDriveTest extends OpMode {//does what the name says
     public void init(){
         robot.init(hardwareMap);
 
-        data.addField("left speed");
-        data.addField("right speed");
+        data.addField("bl speed");
+        data.addField("br speed");
         data.newLine();
 
     }
@@ -32,16 +32,16 @@ public class CalculateSpeedDriveTest extends OpMode {//does what the name says
     public void loop(){
         robot.driveTrain.arcadeDrive(gamepad1.left_stick_x, gamepad1.left_stick_y);
 
-        leftDist = cal.Encoder2Ft(robot.driveTrain.left.getCurrentPosition());
-        rightDist = cal.Encoder2Ft(robot.driveTrain.right.getCurrentPosition());
+        leftDist = cal.Encoder2Ft(robot.driveTrain.bl.getCurrentPosition());
+        rightDist = cal.Encoder2Ft(robot.driveTrain.br.getCurrentPosition());
         curTime = getRuntime();
 
         timeDiff = curTime - preTime;
         leftDistDiff = leftDist - leftPreDist;
         rightDistDiff = rightDist - rightPreDist;
 
-        telemetry.addData("left speed", robot.driveTrain.speed(DriveTrain.motor.left)); // only used on left motor because I'm lazy
-        telemetry.addData("right speed", robot.driveTrain.speed(DriveTrain.motor.right));
+        telemetry.addData("bl speed", robot.driveTrain.speed(DriveTrain.motor.bl)); // only used on bl motor because I'm lazy
+        telemetry.addData("br speed", robot.driveTrain.speed(DriveTrain.motor.br));
         telemetry.update();
 
         leftPreDist = leftDist;

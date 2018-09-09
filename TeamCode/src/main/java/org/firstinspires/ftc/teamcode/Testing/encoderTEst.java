@@ -17,10 +17,10 @@ public class encoderTEst extends LinearOpMode {
 
     @Override
     public void runOpMode(){
-        left = hardwareMap.get(DcMotor.class, "left");
-        right = hardwareMap.get(DcMotor.class, "right");
-        frontLeft = hardwareMap.get(DcMotor.class,  "frontLeft");
-        frontRight = hardwareMap.get(DcMotor.class, "frontRight");
+        left = hardwareMap.get(DcMotor.class, "bl");
+        right = hardwareMap.get(DcMotor.class, "br");
+        frontLeft = hardwareMap.get(DcMotor.class,  "fl");
+        frontRight = hardwareMap.get(DcMotor.class, "fr");
 
 
 
@@ -50,8 +50,8 @@ public class encoderTEst extends LinearOpMode {
         frontRight.setPower(0.4);
 
         while(opModeIsActive() && (left.isBusy() && right.isBusy() && frontLeft.isBusy() && frontRight.isBusy())){
-            telemetry.addData("left motor position", left.getCurrentPosition());
-            telemetry.addData("right motor position", right.getCurrentPosition());
+            telemetry.addData("bl motor position", left.getCurrentPosition());
+            telemetry.addData("br motor position", right.getCurrentPosition());
         }
 
         requestOpModeStop();
