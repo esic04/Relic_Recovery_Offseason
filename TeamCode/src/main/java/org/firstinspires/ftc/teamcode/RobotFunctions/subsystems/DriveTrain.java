@@ -71,6 +71,28 @@ public class DriveTrain {
         fr.setPower(-gamepadY - gamepadX);
     }
 
+    int encoderDist;
+    public void encoderMove(double distance, double power){ //in inches, set to negative to go backwards
+        encoderDist = cal.Inches2Encoder(distance);
+        setMode(motor_mode.run_to_position);
+        bl.setPower(power);
+        br.setPower(power);
+        fl.setPower(power);
+        fr.setPower(power);
+
+        bl.setTargetPosition(bl.getCurrentPosition() + encoderDist);
+        br.setTargetPosition(bl.getCurrentPosition() + encoderDist);
+        fl.setTargetPosition(bl.getCurrentPosition() + encoderDist);
+        fr.setTargetPosition(bl.getCurrentPosition() + encoderDist);
+
+        while(linOpmode.opModeIsActive() && (bl.isBusy() && br.isBusy()) && fl.isBusy() && fr.isBusy()){} //waits for motors to stop moving
+    }
+
+
+
+
+
+
     public void resetEncoders(){
         bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
