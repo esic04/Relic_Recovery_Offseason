@@ -2,9 +2,12 @@ package org.firstinspires.ftc.teamcode.RobotFunctions;
 
 /**
  * This class contains methods for basic calculations such as converting encoder counts to distance in inches
+ *
+ * TODO: delete and replace some methods (encoder calculations) and put into drivetrain class
  */
 
 public class Calculators {
+    Variables variables = new Variables();
     double encoderDistance;
     double distanceIn;
     double distanceFt;
@@ -14,13 +17,13 @@ public class Calculators {
 
     public double Encoder2Inches(double encoder){
         encoderDistance = encoder;
-        distanceIn = (encoderDistance / countsPerRevolution * gearRatio) * (wheelDiameter * Math.PI);
+        distanceIn = (encoderDistance / variables.encoderCntsPerRev * variables.gearRatio) * (variables.wheelDiameter * Math.PI);
         return distanceIn;
     }
 
     public double Encoder2Ft(double encoder){
         encoderDistance = encoder;
-        distanceFt = (encoderDistance / countsPerRevolution * gearRatio) * (wheelDiameter * Math.PI) / 12;
+        distanceFt = (encoderDistance / variables.encoderCntsPerRev * variables.gearRatio) * (variables.wheelDiameter * Math.PI) / 12;
         return distanceFt;
     }
 
