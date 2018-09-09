@@ -11,9 +11,6 @@ public class Calculators {
     double encoderDistance;
     double distanceIn;
     double distanceFt;
-    double gearRatio = 2.0/3.0; //needs to have decimal otherwise int/int = 0
-    double wheelDiameter = 4;
-    double countsPerRevolution = 1220; //for andymark neverest 40
 
     public double Encoder2Inches(double encoder){
         encoderDistance = encoder;
@@ -25,6 +22,12 @@ public class Calculators {
         encoderDistance = encoder;
         distanceFt = (encoderDistance / variables.encoderCntsPerRev * variables.gearRatio) * (variables.wheelDiameter * Math.PI) / 12;
         return distanceFt;
+    }
+
+    int encoder;
+    public int Inches2Encoder(double inches){
+        encoder = (int) Math.round(inches / (variables.wheelDiameter * Math.PI) / variables.gearRatio * variables.encoderCntsPerRev);
+        return encoder;
     }
 
     Point p1, p2;
