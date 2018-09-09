@@ -13,7 +13,7 @@ package org.firstinspires.ftc.teamcode.RobotFunctions.MotionStuff;
 public class PID {
     double Kp, Ki, Kd;
     double tgt, actual, lastActual;
-    double Ilim, outMin, outMax;
+    double Ilim = 0, outMin = 0, outMax = 0;
     double errorSum;
     boolean reversed;
     boolean firstRun = true;
@@ -26,6 +26,30 @@ public class PID {
         Ilim = ILimit; //set limits to 0 to disable
         outMin = OutputMin;
         outMax = OutputMax;
+    }
+
+    public PID(double Kp, double Ki, double Kd, double ILimit){
+        this.Kp = Kp;
+        this.Ki = Ki;
+        this.Kd = Kd;
+        Ilim = ILimit; //set limits to 0 to disable
+    }
+
+    public PID(double Kp, double Ki, double Kd, double OutputMin, double OutputMax){
+        this.Kp = Kp;
+        this.Ki = Ki;
+        this.Kd = Kd;
+        outMin = OutputMin;
+        outMax = OutputMax;
+    }
+
+    public PID(){
+    }
+
+    public PID(double Kp, double Ki, double Kd){ //set limits to 0 for no limit
+        this.Kp = Kp;
+        this.Ki = Ki;
+        this.Kd = Kd;
     }
 
     public void setP(double Kp){this.Kp = Kp;}
@@ -44,9 +68,12 @@ public class PID {
 
     public void setTarget(double Target){tgt = Target;}
 
-    public double getOutput(double actual, double target){
-        tgt = target;
-        this.actual = actual;
+    public double getError(){return error;}
+
+    public double getOutput(double actual, double target){return target - actual;}
+
+    public double getOutput(double error){
+        this.error = error;
 
         error = tgt - actual;
 
