@@ -63,10 +63,10 @@ public class ProfileRunTest extends LinearOpMode {
 
             /* headingOut = headingPID.getOutput(heading, 90);
 
-            leftOut = pid1.getOutput(robot.driveTrain.leftSpeed(), output) + leftOut - headingOut;  //for velocity pid, adds pid out to previous output for better control
-            rightOut = pid3.getOutput(robot.driveTrain.rightSpeed(), output) + rightOut + headingOut;
-            frontLeftOut = pid2.getOutput(robot.driveTrain.frontLeftSpeed(), output) + frontLeftOut - headingOut;
-            frontRightOut = pid4.getOutput(robot.driveTrain.frontRightSpeed(), output) + frontRightOut + headingOut;
+            leftOut = pid1.getOutput(robot.driveTrain.speed(DriveTrain.motor.left), output) + leftOut - headingOut;  //for velocity pid, adds pid out to previous output for better control
+            rightOut = pid3.getOutput(robot.driveTrain.speed(DriveTrain.motor.right), output) + rightOut + headingOut;
+            frontLeftOut = pid2.getOutput(robot.driveTrain.speed(DriveTrain.motor.frontLeft), output) + frontLeftOut - headingOut;
+            frontRightOut = pid4.getOutput(robot.driveTrain.speed(DriveTrain.motor.frontRight), output) + frontRightOut + headingOut;
 
             robot.driveTrain.left.setPower(leftOut);
             robot.driveTrain.right.setPower(rightOut);
@@ -76,7 +76,7 @@ public class ProfileRunTest extends LinearOpMode {
             */
 
             data.addField(time);
-            data.addField(((robot.driveTrain.leftSpeed() + robot.driveTrain.rightSpeed() + robot.driveTrain.frontLeftSpeed() + robot.driveTrain.frontRightSpeed()) / 4) * 12);
+            data.addField(((robot.driveTrain.speed(DriveTrain.motor.left) + robot.driveTrain.speed(DriveTrain.motor.right) + robot.driveTrain.speed(DriveTrain.motor.frontLeft) + robot.driveTrain.speed(DriveTrain.motor.frontRight)) / 4) * 12);
             data.addField(output);
             data.newLine();
 
@@ -89,8 +89,8 @@ public class ProfileRunTest extends LinearOpMode {
             robot.driveTrain.frontRight.setVelocity(angularSpeed, AngleUnit.RADIANS);
 
             telemetry.addData("profile output", output);
-            telemetry.addData("left actual speed", robot.driveTrain.leftSpeed() * 12);
-            telemetry.addData("right actual speed", robot.driveTrain.rightSpeed() * 12);
+            telemetry.addData("left actual speed", robot.driveTrain.speed(DriveTrain.motor.left) * 12);
+            telemetry.addData("right actual speed", robot.driveTrain.speed(DriveTrain.motor.right) * 12);
             telemetry.addData("heading", heading);
             telemetry.addData("left pow", robot.driveTrain.left.getPower());
             telemetry.update();

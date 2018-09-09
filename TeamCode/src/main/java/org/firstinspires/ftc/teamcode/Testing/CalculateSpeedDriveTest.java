@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.RobotFunctions.DataLogger;
 import org.firstinspires.ftc.teamcode.RobotFunctions.TankHardware;
 import org.firstinspires.ftc.teamcode.RobotFunctions.Calculators;
+import org.firstinspires.ftc.teamcode.RobotFunctions.subsystems.DriveTrain;
 
 @TeleOp
 public class CalculateSpeedDriveTest extends OpMode {//does what the name says
@@ -16,7 +17,7 @@ public class CalculateSpeedDriveTest extends OpMode {//does what the name says
     TankHardware robot = new TankHardware();
     @Override
     public void init(){
-        robot.init(hardwareMap, this);
+        robot.init(hardwareMap);
 
         data.addField("left speed");
         data.addField("right speed");
@@ -39,8 +40,8 @@ public class CalculateSpeedDriveTest extends OpMode {//does what the name says
         leftDistDiff = leftDist - leftPreDist;
         rightDistDiff = rightDist - rightPreDist;
 
-        telemetry.addData("left speed", robot.driveTrain.leftSpeed()); // only used on left motor because I'm lazy
-        telemetry.addData("right speed", robot.driveTrain.rightSpeed());
+        telemetry.addData("left speed", robot.driveTrain.speed(DriveTrain.motor.left)); // only used on left motor because I'm lazy
+        telemetry.addData("right speed", robot.driveTrain.speed(DriveTrain.motor.right));
         telemetry.update();
 
         leftPreDist = leftDist;

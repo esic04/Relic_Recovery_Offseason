@@ -10,7 +10,7 @@ public class MecanumDrive extends OpMode {
     MecanumHardware robot = new MecanumHardware();
 
     public void init(){
-        robot.init(hardwareMap, this);
+        robot.init(hardwareMap);
     }
 
     public void loop(){

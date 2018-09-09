@@ -12,7 +12,7 @@ public class OutreachArcade extends OpMode {
 
     @Override
     public void init(){
-        robot.init(hardwareMap, this);
+        robot.init(hardwareMap);
 
         robot.driveTrain.right.setDirection(DcMotorSimple.Direction.REVERSE);
         robot.driveTrain.frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
