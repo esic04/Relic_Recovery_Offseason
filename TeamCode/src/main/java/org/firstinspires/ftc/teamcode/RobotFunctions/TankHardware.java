@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.RobotFunctions.MotionStuff.PID;
 import org.firstinspires.ftc.teamcode.RobotFunctions.subsystems.DriveTrain;
 import org.firstinspires.ftc.teamcode.RobotFunctions.subsystems.Sensors;
 
@@ -44,6 +45,28 @@ public class TankHardware {
         driveTrain.bl.setDirection(DcMotorSimple.Direction.REVERSE);
         driveTrain.fl.setDirection(DcMotorSimple.Direction.REVERSE);
         sensors = new Sensors(hMap);
+    }
+
+    PID turning = new PID(0, 0, 0, 0.5, -0.7, 0.7); //TODO: tune pid
+    double startAngle, output, error, target;
+
+    public void pidTurn(double angle){ //set to negative angle to go in opposite direction
+        startAngle = sensors.getHeading();
+        target = ((angle + startAngle) + 360) % 360; //prevents angle from exceeding 360
+
+        driveTrain.setMode(DriveTrain.motor_mode.run_with_encoder); //makes motor response linear so pid can handle it better
+
+        error = target - startAngle;
+        while(LinOpmode.opModeIsActive() && (error > 1 || Math.abs(output) > 0.2)){
+            error = target - sensors.getHeading();
+            output = turning.getOutput(error);
+
+            driveTrain.bl.setPower(-output);
+            driveTrain.br.setPower(output);
+            driveTrain.fl.setPower(-output);
+            driveTrain.fr.setPower(output);
+        }
+
     }
 
     Pose pos = new Pose(0, 0, 0);
